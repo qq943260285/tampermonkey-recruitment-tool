@@ -401,7 +401,7 @@
             DleButtonToItem: function (item) {
                 return $(item).closest('.el');
             },
-            DleButtonStyle: 'margin: 0 10px;display: inline-table;'
+            DleButtonStyle: 'margin: 0 10px;display: contents;'
         },
         {
             //网站
@@ -518,11 +518,15 @@
                 break;
             }
         }
+        //刷新
+        blacklistRefresh();
+    }
+
+    function blacklistRefresh() {
         //过滤列表
         blacklistFilter();
         //添加按钮
         createDelDiv();
-
     }
 
     //====== 过滤列表
@@ -578,8 +582,8 @@
     //====== 创建隐藏按钮
     function createDelDiv() {
         blacklistFunction.HtmlToList().each(function (index, element) {
-            blacklistFunction.ItemToNameJq(element)
-                .after(
+            if ($(element).find('.xyzs-del-div').length === 0) {
+                blacklistFunction.ItemToNameJq(element).after(
                     $('<div title="加入黑名单" style="' + blacklistFunction.DleButtonStyle + '" class="xyzs-del-div"><i class="fa fa-trash xyzs-del-ico"></i></div>')
                         .click(function () {
                             addDlacklistName(
@@ -592,11 +596,12 @@
                             return false;
                         })
                 )
+            }
         });
     }
 
     // GM_setValue(blacklistKey, JSON.stringify([]));
-    setTimeout(function () {
-        blacklistInit();
-    }, 3000);
+
+    blacklistInit();
+    setInterval(blacklistRefresh, 3000);
 })();
