@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         高级求职助手/招聘网站助手，支持前程无忧、智联招聘、BOSS直聘、拉钩、猎聘
 // @namespace    https://github.com/qq943260285
-// @version      0.1
+// @version      1.3
 // @description  1.快捷添加企业黑名单；2.支持正则表达式黑名单；3.支持前程无忧、智联招聘、BOSS直聘、拉钩、猎聘;4.各大网站黑名单数据连通。
 // @author       小宇专属(943260285@qq.com)
 // @license      GPL-3.0-only
@@ -335,7 +335,6 @@
         }
     };
 
-
     createMenu();
     tool.append(menu);
     toolRegion.append(tool);
@@ -375,138 +374,72 @@
     let blacklistKey = 'blacklist'
         , blacklistList = GM_getValue(blacklistKey) ? JSON.parse(GM_getValue(blacklistKey)) : []
         , blacklistFunction = {
+        //网站
         WebUrl: null,
-        HtmlToList: null,
-        ItemToNameJq: null,
-        NameJqToNameText: null,
-        DleButtonToItem: null,
-        DleButtonStyle: null
+        //是否需要刷新
+        IsRefresh: null,
+        //加入黑名单按钮样式
+        DleButtonStyle: null,
+        //网站定位列表
+        HtmlToList: () => {
+        },
+        //列表项定位名称对象
+        ItemToNameJq: () => {
+        },
+        //名称对象定位名称字符串
+        NameJqToNameText: () => {
+        },
+        //x按钮定位Item
+        DleButtonToItem: () => {
+        }
     }, WebJqList = [
         {
-            //网站
             WebUrl: "search.51job.com",
-            //网站定位列表
-            HtmlToList: function () {
-                return $('.el .t2 a[title]').closest('.el');
-            },
-            //列表项定位名称对象
-            ItemToNameJq: function (item) {
-                return $(item).find('.t2 a[title]');
-            },
-            //名称对象定位名称字符串
-            NameJqToNameText: function (item) {
-                return $(item).attr('title');
-            },
-            //x按钮定位Item
-            DleButtonToItem: function (item) {
-                return $(item).closest('.el');
-            },
-            DleButtonStyle: 'margin: 0 10px;display: contents;'
+            IsRefresh: false,
+            DleButtonStyle: 'margin: 0 10px;display: contents;',
+            HtmlToList: () => $('.el .t2 a[title]').closest('.el'),
+            ItemToNameJq: (item) => $(item).find('.t2 a[title]'),
+            NameJqToNameText: (item) => $(item).attr('title'),
+            DleButtonToItem: (item) => $(item).closest('.el')
         },
         {
-            //网站
             WebUrl: "sou.zhaopin.com",
-            //网站定位列表
-            HtmlToList: function () {
-                // console.log('sou.zhaopin.com', $('#listContent .clearfix'));
-                return $('#listContent .clearfix .commpanyName a[title]').closest('.clearfix');
-            },
-            //列表项定位名称对象
-            ItemToNameJq: function (item) {
-                // console.log("列表项定位名称对象", $(item).find('.commpanyName a[title]'))
-                return $(item).find('.commpanyName a[title]');
-            },
-            //名称对象定位名称字符串
-            NameJqToNameText: function (item) {
-                // console.log("名称对象定位名称字符串", $(item).attr('title'))
-                return $(item).attr('title');
-            },
-            //x按钮定位Item
-            DleButtonToItem: function (item) {
-                // console.log("x按钮定位Item", $(item).closest('.clearfix'))
-                return $(item).closest('.clearfix');
-            },
-            DleButtonStyle: 'margin: 0 10px;display: inline-table;'
+            IsRefresh: true,
+            DleButtonStyle: 'margin: 0 10px;display: inline-table;',
+            HtmlToList: () => $('#listContent .clearfix .commpanyName a[title]').closest('.clearfix'),
+            ItemToNameJq: (item) => $(item).find('.commpanyName a[title]'),
+            NameJqToNameText: (item) => $(item).attr('title'),
+            DleButtonToItem: (item) => $(item).closest('.clearfix')
         },
         {
-            //网站
             WebUrl: "www.zhipin.com",
-            //网站定位列表
-            HtmlToList: function () {
-                // console.log('网站定位列表', $('.company-text h3 a[ka]').closest('li'));
-                return $('.company-text h3 a[ka]').closest('li');
-            },
-            //列表项定位名称对象
-            ItemToNameJq: function (item) {
-                // console.log("列表项定位名称对象", $(item).find('.commpanyName a[title]'))
-                return $(item).find('.company-text h3 a[ka]');
-            },
-            //名称对象定位名称字符串
-            NameJqToNameText: function (item) {
-                // console.log("名称对象定位名称字符串", $(item).text())
-                return $(item).text();
-            },
-            //x按钮定位Item
-            DleButtonToItem: function (item) {
-                // console.log("x按钮定位Item", $(item).closest('li'))
-                return $(item).closest('li');
-            },
-            DleButtonStyle: 'margin: 0 10px;display: inline-table;'
+            IsRefresh: false,
+            DleButtonStyle: 'margin: 0 10px;display: inline-table;',
+            HtmlToList: () => $('.company-text h3 a[ka]').closest('li'),
+            ItemToNameJq: (item) => $(item).find('.company-text h3 a[ka]'),
+            NameJqToNameText: (item) => $(item).text(),
+            DleButtonToItem: (item) => $(item).closest('li')
         },
         {
-            //网站
             WebUrl: "www.lagou.com",
-            //网站定位列表
-            HtmlToList: function () {
-
-                // console.log('网站定位列表', $('li .company_name a[data-lg-tj-cid]').closest('li'));
-                return $('li .company_name a[data-lg-tj-cid]').closest('li');
-            },
-            //列表项定位名称对象
-            ItemToNameJq: function (item) {
-                // console.log("列表项定位名称对象", $(item).find('.commpanyName a[title]'))
-                return $(item).find('.company_name a[data-lg-tj-cid]');
-            },
-            //名称对象定位名称字符串
-            NameJqToNameText: function (item) {
-                // console.log("名称对象定位名称字符串", $(item).text())
-                return $(item).text();
-            },
-            //x按钮定位Item
-            DleButtonToItem: function (item) {
-                // console.log("x按钮定位Item", $(item).closest('li'))
-                return $(item).closest('li');
-            },
-            DleButtonStyle: 'margin: 0 10px;display: inline-table;'
+            IsRefresh: false,
+            DleButtonStyle: 'margin: 0 10px;display: inline-table;',
+            HtmlToList: () => $('li .company_name a[data-lg-tj-cid]').closest('li'),
+            ItemToNameJq: (item) => $(item).find('.company_name a[data-lg-tj-cid]'),
+            NameJqToNameText: (item) => $(item).text(),
+            DleButtonToItem: (item) => $(item).closest('li')
         },
         {
-            //网站
             WebUrl: "www.liepin.com",
-            //网站定位列表
-            HtmlToList: function () {
-
-                // console.log('网站定位列表', $('li .company_name a[data-lg-tj-cid]').closest('li'));
-                return $('li .company-name a[title]').closest('li');
-            },
-            //列表项定位名称对象
-            ItemToNameJq: function (item) {
-                // console.log("列表项定位名称对象", $(item).find('.commpanyName a[title]'))
-                return $(item).find('.company-name a[title]');
-            },
-            //名称对象定位名称字符串
-            NameJqToNameText: function (item) {
-                // console.log("名称对象定位名称字符串", $(item).text())
-                return $(item).text();
-            },
-            //x按钮定位Item
-            DleButtonToItem: function (item) {
-                // console.log("x按钮定位Item", $(item).closest('li'))
-                return $(item).closest('li');
-            },
-            DleButtonStyle: 'margin: 0 10px;display: inline-flex;position: absolute;right: 12px;'
+            IsRefresh: false,
+            DleButtonStyle: 'margin: 0 10px;display: inline-flex;position: absolute;right: 12px;',
+            HtmlToList: () => $('li .company-name a[title]').closest('li'),
+            ItemToNameJq: (item) => $(item).find('.company-name a[title]'),
+            NameJqToNameText: (item) => $(item).text(),
+            DleButtonToItem: (item) => $(item).closest('li')
         }];
 
-    //====== 1.初始化 =======
+    //====== 初始化 =======
     function blacklistInit() {
 
         //站点方法初始化
@@ -520,8 +453,10 @@
         }
         //刷新
         blacklistRefresh();
+        if (blacklistFunction.IsRefresh) setInterval(blacklistRefresh, 3000);
     }
 
+    //====== 刷新 ======
     function blacklistRefresh() {
         //过滤列表
         blacklistFilter();
@@ -529,7 +464,7 @@
         createDelDiv();
     }
 
-    //====== 过滤列表
+    //====== 过滤列表 ======
     function blacklistFilter() {
         blacklistFunction.HtmlToList().each(function (index, element) {
             let isShow = true;
@@ -555,11 +490,10 @@
         });
     }
 
-    //====== 添加黑名单
+    //====== 添加黑名单 ======
     function addDlacklistName(name) {
         name += '';
         if (blacklistList.indexOf(name) === -1) {
-
             // console.log("加入黑名单," + name);
             blacklistList.push(name);
             GM_setValue(blacklistKey, JSON.stringify(blacklistList));
@@ -570,7 +504,7 @@
         blacklistFilter();
     }
 
-    //====== 删除黑名单
+    //====== 删除黑名单 ======
     function dleDlacklistName(name) {
         if (blacklistList.indexOf(name) > -1) {
             blacklistList.splice(blacklistList.indexOf(name), 1);
@@ -579,7 +513,7 @@
         blacklistFilter();
     }
 
-    //====== 创建隐藏按钮
+    //====== 创建隐藏按钮 ======
     function createDelDiv() {
         blacklistFunction.HtmlToList().each(function (index, element) {
             if ($(element).find('.xyzs-del-div').length === 0) {
@@ -601,7 +535,5 @@
     }
 
     // GM_setValue(blacklistKey, JSON.stringify([]));
-
     blacklistInit();
-    setInterval(blacklistRefresh, 3000);
 })();
