@@ -14,16 +14,16 @@
 
 - 前程无忧测试：
 
-![截图](assets/截图 (2).jpg)
+  ![截图](assets/2.jpg)
 
 - 智联招聘测试：
 
-![截图](assets/截图 (3).jpg)
+  ![截图](assets/3.jpg)
 
 - BOOS直聘测试
 
-![截图](assets/截图 (1).jpg)
+  ![截图](assets/1.jpg)
 
 - 黑名单管理测试：
 
-  ![截图](assets/截图 (4).jpg)
+  ![截图](assets/4.jpg)
