@@ -1,11 +1,16 @@
 // ==UserScript==
-// @name         高级求职助手，支持前程无忧、智联招聘、BOSS直聘、拉钩、猎聘
+// @name         高级求职助手/招聘网站助手，支持前程无忧、智联招聘、BOSS直聘、拉钩、猎聘
 // @namespace    https://github.com/qq943260285
 // @version      0.1
-// @description  1.快捷添加企业黑名单；2.支持正则表达式黑名单；3.支持前程无忧、智联招聘、BOSS直聘;4.各大网站黑名单数据连通。
+// @description  1.快捷添加企业黑名单；2.支持正则表达式黑名单；3.支持前程无忧、智联招聘、BOSS直聘、拉钩、猎聘;4.各大网站黑名单数据连通。
 // @author       小宇专属(943260285@qq.com)
 // @license      GPL-3.0-only
 // @create       2019-3-25
+// @icon         https://qq943260285.github.io/favicon.png
+// @lastmodified 2019-3-25
+// @supportURL   https://github.com/qq943260285/tampermonkey-recruitment-tool.git
+// @feedback-url https://github.com/qq943260285/tampermonkey-recruitment-tool.git
+// @note         2019.3.25-V0.1 初始化项目添加黑名单功能，后续视情况添加功能
 // @match        *://search.51job.com/*
 // @match        *://sou.zhaopin.com/*
 // @match        *://www.zhipin.com/*
@@ -42,7 +47,7 @@
              width: ` + toolSize + `px;
              height: ` + toolSize + `px;
              border-radius:` + toolSize / 2 + `px;
-             -moz-border-radius:` + toolSize / 2 + `px; /* Old Firefox */
+             -moz-border-radius:` + toolSize / 2 + `px; 
              position: absolute;
              left: 10px;
              bottom: 10px;
@@ -270,7 +275,7 @@
             ico: "fa-eye-slash",
             title: "黑名单管理",
             callback: function () {
-                console.log("黑名单");
+                // console.log("黑名单");
                 let div = $(`
                     <div class="xyzs-enterprise-list xyzs-scrollbar" ></div>
                 `);
@@ -287,18 +292,18 @@
                 showWin("黑名单管理", div);
             }
         },
-        {
-            ico: "fa-cog",
-            title: "设置",
-            callback: function () {
-                console.log("设置");
-            }
-        },
+        // {
+        //     ico: "fa-cog",
+        //     title: "设置",
+        //     callback: function () {
+        //         // console.log("设置");
+        //     }
+        // },
         {
             ico: "fa-podcast",
             title: "作者博客",
             callback: function () {
-                console.log("作者博客");
+                // console.log("作者博客");
                 window.open("https://qq943260285.github.io");
             }
         },
@@ -306,7 +311,7 @@
             ico: "fa-github",
             title: "github开源",
             callback: function () {
-                console.log("github")
+                // console.log("github")
                 window.open('https://github.com/qq943260285/tampermonkey-recruitment-tool.git');
             }
         },
@@ -402,22 +407,22 @@
             WebUrl: "sou.zhaopin.com",
             //网站定位列表
             HtmlToList: function () {
-                console.log('sou.zhaopin.com', $('#listContent .clearfix'));
+                // console.log('sou.zhaopin.com', $('#listContent .clearfix'));
                 return $('#listContent .clearfix .commpanyName a[title]').closest('.clearfix');
             },
             //列表项定位名称对象
             ItemToNameJq: function (item) {
-                console.log("列表项定位名称对象", $(item).find('.commpanyName a[title]'))
+                // console.log("列表项定位名称对象", $(item).find('.commpanyName a[title]'))
                 return $(item).find('.commpanyName a[title]');
             },
             //名称对象定位名称字符串
             NameJqToNameText: function (item) {
-                console.log("名称对象定位名称字符串", $(item).attr('title'))
+                // console.log("名称对象定位名称字符串", $(item).attr('title'))
                 return $(item).attr('title');
             },
             //x按钮定位Item
             DleButtonToItem: function (item) {
-                console.log("x按钮定位Item", $(item).closest('.clearfix'))
+                // console.log("x按钮定位Item", $(item).closest('.clearfix'))
                 return $(item).closest('.clearfix');
             },
             DleButtonStyle: 'margin: 0 10px;display: inline-table;'
@@ -427,22 +432,22 @@
             WebUrl: "www.zhipin.com",
             //网站定位列表
             HtmlToList: function () {
-                console.log('网站定位列表', $('.company-text h3 a[ka]').closest('li'));
+                // console.log('网站定位列表', $('.company-text h3 a[ka]').closest('li'));
                 return $('.company-text h3 a[ka]').closest('li');
             },
             //列表项定位名称对象
             ItemToNameJq: function (item) {
-                console.log("列表项定位名称对象", $(item).find('.commpanyName a[title]'))
+                // console.log("列表项定位名称对象", $(item).find('.commpanyName a[title]'))
                 return $(item).find('.company-text h3 a[ka]');
             },
             //名称对象定位名称字符串
             NameJqToNameText: function (item) {
-                console.log("名称对象定位名称字符串", $(item).text())
+                // console.log("名称对象定位名称字符串", $(item).text())
                 return $(item).text();
             },
             //x按钮定位Item
             DleButtonToItem: function (item) {
-                console.log("x按钮定位Item", $(item).closest('li'))
+                // console.log("x按钮定位Item", $(item).closest('li'))
                 return $(item).closest('li');
             },
             DleButtonStyle: 'margin: 0 10px;display: inline-table;'
@@ -453,22 +458,22 @@
             //网站定位列表
             HtmlToList: function () {
 
-                console.log('网站定位列表', $('li .company_name a[data-lg-tj-cid]').closest('li'));
+                // console.log('网站定位列表', $('li .company_name a[data-lg-tj-cid]').closest('li'));
                 return $('li .company_name a[data-lg-tj-cid]').closest('li');
             },
             //列表项定位名称对象
             ItemToNameJq: function (item) {
-                console.log("列表项定位名称对象", $(item).find('.commpanyName a[title]'))
+                // console.log("列表项定位名称对象", $(item).find('.commpanyName a[title]'))
                 return $(item).find('.company_name a[data-lg-tj-cid]');
             },
             //名称对象定位名称字符串
             NameJqToNameText: function (item) {
-                console.log("名称对象定位名称字符串", $(item).text())
+                // console.log("名称对象定位名称字符串", $(item).text())
                 return $(item).text();
             },
             //x按钮定位Item
             DleButtonToItem: function (item) {
-                console.log("x按钮定位Item", $(item).closest('li'))
+                // console.log("x按钮定位Item", $(item).closest('li'))
                 return $(item).closest('li');
             },
             DleButtonStyle: 'margin: 0 10px;display: inline-table;'
@@ -479,22 +484,22 @@
             //网站定位列表
             HtmlToList: function () {
 
-                console.log('网站定位列表', $('li .company_name a[data-lg-tj-cid]').closest('li'));
+                // console.log('网站定位列表', $('li .company_name a[data-lg-tj-cid]').closest('li'));
                 return $('li .company-name a[title]').closest('li');
             },
             //列表项定位名称对象
             ItemToNameJq: function (item) {
-                console.log("列表项定位名称对象", $(item).find('.commpanyName a[title]'))
+                // console.log("列表项定位名称对象", $(item).find('.commpanyName a[title]'))
                 return $(item).find('.company-name a[title]');
             },
             //名称对象定位名称字符串
             NameJqToNameText: function (item) {
-                console.log("名称对象定位名称字符串", $(item).text())
+                // console.log("名称对象定位名称字符串", $(item).text())
                 return $(item).text();
             },
             //x按钮定位Item
             DleButtonToItem: function (item) {
-                console.log("x按钮定位Item", $(item).closest('li'))
+                // console.log("x按钮定位Item", $(item).closest('li'))
                 return $(item).closest('li');
             },
             DleButtonStyle: 'margin: 0 10px;display: inline-flex;position: absolute;right: 12px;'
@@ -502,21 +507,21 @@
 
     //====== 1.初始化 =======
     function blacklistInit() {
-        setTimeout(function () {
-            //站点方法初始化
-            for (let i = 0; i < WebJqList.length; i++) {
-                console.log(window.location.host);
 
-                if (WebJqList[i].WebUrl === window.location.host) {
-                    blacklistFunction = WebJqList[i];
-                    break;
-                }
+        //站点方法初始化
+        for (let i = 0; i < WebJqList.length; i++) {
+            // console.log(window.location.host);
+
+            if (WebJqList[i].WebUrl === window.location.host) {
+                blacklistFunction = WebJqList[i];
+                break;
             }
-            //过滤列表
-            blacklistFilter();
-            //添加按钮
-            createDelDiv();
-        }, 5000);
+        }
+        //过滤列表
+        blacklistFilter();
+        //添加按钮
+        createDelDiv();
+
     }
 
     //====== 过滤列表
@@ -526,13 +531,13 @@
             let name = blacklistFunction.NameJqToNameText(blacklistFunction.ItemToNameJq(element));
             if (blacklistList.indexOf(name) > -1) {
                 isShow = false;
-                console.log('indexOf过滤,' + name);
+                // console.log('indexOf过滤,' + name);
             }
             else {
                 for (let i = 0; i < blacklistList.length; i++) {
                     if (new RegExp(blacklistList[i], 'i').test(name)) {
                         isShow = false;
-                        console.log(blacklistList[i] + '正则表达式过滤,' + name);
+                        // console.log(blacklistList[i] + '正则表达式过滤,' + name);
                         break;
                     }
                 }
@@ -550,12 +555,12 @@
         name += '';
         if (blacklistList.indexOf(name) === -1) {
 
-            console.log("加入黑名单," + name);
+            // console.log("加入黑名单," + name);
             blacklistList.push(name);
             GM_setValue(blacklistKey, JSON.stringify(blacklistList));
         }
         else {
-            console.log("已存在黑名单," + name);
+            // console.log("已存在黑名单," + name);
         }
         blacklistFilter();
     }
@@ -590,5 +595,7 @@
     }
 
     // GM_setValue(blacklistKey, JSON.stringify([]));
-    blacklistInit();
+    setTimeout(function () {
+        blacklistInit();
+    }, 3000);
 })();
