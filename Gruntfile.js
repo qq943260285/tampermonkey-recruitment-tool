@@ -1,63 +1,91 @@
 module.exports = function (grunt) {
-    // 项目配置
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         babel: {
             options: {
-                sourceMap: true,
+                sourceMap: false,
                 presets: ['@babel/preset-env']
             },
             dist: {
                 files: {
-                    'tampermonkey-recruitment-tool.es5.js': 'tampermonkey-recruitment-tool.js'
+                    'tmp/tampermonkey-recruitment-tool.es5.js': 'src/tampermonkey-recruitment-tool.js'
                 }
+            },
+            dist2: {
+                files: [{
+                    expand: true,
+                    cwd: 'src/',
+                    src: ['*.js'],
+                    dest: 'tmp/es5'
+                }]
+            }
+        },
+        watch: {
+            firct: {
+                files: 'src/*.js',
+                tasks: 'xiaoyu'
             }
         },
         uglify: {
-            options: {
-                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'//添加banner
-            },
-            xyzsBuild: {//任务一：压缩a.js，不混淆变量名，保留注释，添加banner和footer
+            xyzsBuild: {
                 options: {
-                    mangle: false, //不混淆变量名
-                    preserveComments: false, //不删除注释，还可以为 false（删除全部注释），some（保留@preserve @license @cc_on等注释）
-                    footer: '\n/*! <%= pkg.name %> 最后修改于： <%= grunt.template.today("yyyy-mm-dd") %> */'//添加footer
+                    mangle: false,
+                    compress: {
+                        drop_console: true,
+                        sequences: true,
+                        conditionals: false,
+                        comparisons: true,
+                        booleans: true,
+                        loops: true,
+                        hoist_funs: true,
+                        if_return: false,
+                        inline: false,
+                        join_vars: true,
+                        reduce_vars: true,
+                        negate_iife: false,
+                        passes: 1,
+                    },
+                    preserveComments: false,
+                    beautify: true,
+                    banner: `// ==UserScript==
+// @name         高级求职助手/招聘网站助手，支持前程无忧、智联招聘、BOSS直聘、拉钩、猎聘
+// @namespace    https://github.com/qq943260285
+// @version      1.3
+// @description  1.快捷添加企业黑名单；2.支持正则表达式黑名单；3.支持前程无忧、智联招聘、BOSS直聘、拉钩、猎聘;4.各大网站黑名单数据连通。
+// @author       小宇专属(943260285@qq.com)
+// @license      GPL-3.0-only
+// @icon         https://qq943260285.github.io/favicon.png
+// @create       2019-3-25
+// @lastmodified 2019-3-25
+// @home-url     https://greasyfork.org/zh-TW/scripts/380848
+// @supportURL   https://github.com/qq943260285/tampermonkey-recruitment-tool.git
+// @feedback-url https://github.com/qq943260285/tampermonkey-recruitment-tool.git
+// @note         2019.3.25-V0.1 初始化项目添加黑名单功能，后续视情况添加功能
+// @match        *://search.51job.com/*
+// @match        *://sou.zhaopin.com/*
+// @match        *://www.zhipin.com/*
+// @match        *://www.lagou.com/*
+// @match        *://www.liepin.com/*
+// @require      https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js
+// @grant        GM_getValue
+// @grant        GM.getValue
+// @grant        GM_setValue
+// @grant        GM.setValue
+// @grant		 GM_addStyle
+// ==/UserScript==`,
+                    footer: '\n/*! <%= pkg.name %> 最后修改于： <%= grunt.template.today("yyyy-mm-dd") %> */'
                 },
                 files: {
-                    'tampermonkey-recruitment-tool.min.js': ['tampermonkey-recruitment-tool.es5.js']
+                    'dist/tampermonkey-recruitment-tool.min.js': ['tmp/tampermonkey-recruitment-tool.es5.js']
                 }
-            },
-            // buildb:{//任务二：压缩b.js，输出压缩信息
-            //     options: {
-            //         report: "min"//输出压缩率，可选的值有 false(不输出信息)，gzip
-            //     },
-            //     files: {
-            //         'output/js/b.min.js': ['js/main/b.js']
-            //     }
-            // },
-            // buildall: {//任务三：按原文件结构压缩js文件夹内所有JS文件
-            //     files: [{
-            //         expand:true,
-            //         cwd:'js',//js目录下
-            //         src:'**/*.js',//所有js文件
-            //         dest: 'output/js'//输出到此目录下
-            //     }]
-            // },
-            // release: {//任务四：合并压缩a.js和b.js
-            //     files: {
-            //         'output/js/index.min.js': ['js/a.js', 'js/main/b.js']
-            //     }
-            // }
+            }
         }
     });
-
-    // 加载提供"uglify"任务的插件
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-babel');
-
-    // 默认任务
-    // grunt.registerTask('default', ['uglify:release']);
-    grunt.registerTask('mina', ['babel','uglify:xyzsBuild',]);
-    // grunt.registerTask('minb', ['uglify:buildb']);
-    // grunt.registerTask('minall', ['uglify:buildall']);
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.registerTask('default', ['watch']);//cmd:grunt
+    grunt.registerTask('xiaoyu', ['babel:dist', 'uglify:xyzsBuild',]);//cmd:grunt xiaoyu
 }
+
+

@@ -2,7 +2,7 @@
   "name": "tampermonkey-recruitment-tool",
   "version": "1.0.0",
   "description": "油猴脚本编写",
-  "main": "tampermonkey-recruitment-tool.js",
+  "main": "src/tampermonkey-recruitment-tool.js",
   "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.4.0",
@@ -10,7 +10,8 @@
     "babel-core": "^6.26.3",
     "grunt": "^1.0.4",
     "grunt-babel": "^8.0.0",
-    "grunt-contrib-uglify": "^4.0.1"
+    "grunt-contrib-uglify": "^4.0.1",
+    "grunt-contrib-watch": "^1.1.0"
   },
   "scripts": {},
   "repository": {

@@ -1,37 +1,11 @@
-// ==UserScript==
-// @name         高级求职助手/招聘网站助手，支持前程无忧、智联招聘、BOSS直聘、拉钩、猎聘
-// @namespace    https://github.com/qq943260285
-// @version      1.3
-// @description  1.快捷添加企业黑名单；2.支持正则表达式黑名单；3.支持前程无忧、智联招聘、BOSS直聘、拉钩、猎聘;4.各大网站黑名单数据连通。
-// @author       小宇专属(943260285@qq.com)
-// @license      GPL-3.0-only
-// @icon         https://qq943260285.github.io/favicon.png
-// @create       2019-3-25
-// @lastmodified 2019-3-25
-// @home-url     https://greasyfork.org/zh-TW/scripts/380848
-// @supportURL   https://github.com/qq943260285/tampermonkey-recruitment-tool.git
-// @feedback-url https://github.com/qq943260285/tampermonkey-recruitment-tool.git
-// @note         2019.3.25-V0.1 初始化项目添加黑名单功能，后续视情况添加功能
-// @match        *://search.51job.com/*
-// @match        *://sou.zhaopin.com/*
-// @match        *://www.zhipin.com/*
-// @match        *://www.lagou.com/*
-// @match        *://www.liepin.com/*
-// @require      https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js
-// @grant        GM_getValue
-// @grant        GM.getValue
-// @grant        GM_setValue
-// @grant        GM.setValue
-// @grant		 GM_addStyle
-// ==/UserScript==
 (function () {
     'use strict';
+    console.log("xxx")
     let toolSize = 50;
     let positionLeft = true;
     //控制展开
     let isExpand = true;
     let body = $('body');
-
     body.before(`<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />`)
     body.before(
         `<style>
