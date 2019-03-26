@@ -7,7 +7,6 @@
             //控制展开
             let isExpand = true;
             let body = $('body');
-            body.before(`<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />`)
             body.before(
                 `<style>
             .xyzs-tool-region{

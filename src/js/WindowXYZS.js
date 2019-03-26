@@ -1,6 +1,6 @@
 (function ($) {
     $.extend({
-            WindowXYZS: function (winTitle, winDiv) {
+            WindowXYZS: function () {
                 let body = $('body');
                 body.before(
                     `<style>
@@ -38,6 +38,7 @@
         top: 8px;
         overflow: hidden;
         cursor: pointer;
+        min-width: 25px;
     }
 .xyzs-icon-ios-close{
         font-size: 25px;
@@ -74,6 +75,7 @@
         color: #ff5c4c;
         float: right;
         font-size: 18px;
+        
     }
 
 .xyzs-scrollbar::-webkit-scrollbar-track {
@@ -97,14 +99,18 @@
     
         </style>`
                 );
-                let winRegion = $('<div class="xyzs-win-region"></div>').css('pointer-events', 'none');
-                ;
-//========== 窗口 ==========
+                let winRegion = $('<div class="xyzs-win-region"></div>').click(function () {
+                    win.hide();
+                    winRegion.css({"background-color": "", 'pointer-events': 'none'});
+                    return false;
+                }).css('pointer-events', 'none');
+
+                //========== 窗口 ==========
                 let win = $(`
         <div class="xyzs-win">
             <div class="xyzs-modal-content">
                 <div class="xyzs-modal-close">
-                    <i title="关闭" class="fa fa-remove xyzs-icon-ios-close">X</i>
+                    <i title="关闭" class="fa fa-remove xyzs-icon-ios-close"></i>
                 </div>
                 <div class="xyzs-modal-header">
                     <div class="xyzs-modal-header-inner">标题</div>
@@ -114,7 +120,7 @@
                 </div>
             </div>
         </div>
-    `).hide();
+    `).click(() => false).css('pointer-events', 'auto').hide();
                 win.find('.xyzs-modal-close').click(function () {
                     win.hide();
                     winRegion.css({"background-color": "", 'pointer-events': 'none'});

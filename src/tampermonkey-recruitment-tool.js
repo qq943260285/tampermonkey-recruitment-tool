@@ -37,7 +37,7 @@
                         )
                     )
                 });
-                $.WindowXYZS("黑名单管理", div).showWin("黑名单管理", div)
+                $.WindowXYZS().show("黑名单管理", div)
             }
         },
         // {

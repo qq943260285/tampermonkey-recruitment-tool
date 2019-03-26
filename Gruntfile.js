@@ -104,7 +104,7 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: 'tmp/es5',//js目录下
                     src: '**/*.js',//所有js文件
-                    dest: 'dist'//输出到此目录下
+                    dest: 'dist/js'//输出到此目录下
                 }]
             },
             xyzsBuild3: {
@@ -129,7 +129,7 @@ module.exports = function (grunt) {
                     beautify: true,
                 },
                 files: {
-                    'dist/tampermonkey-recruitment-tool.xx.js': ['tmp/es5/js/FloatingToolXYZS.js','tmp/es5/js/WindowXYZS.js','tmp/es5/tampermonkey-recruitment-tool.js']
+                    'dist/js/tampermonkey-recruitment-tool.xx.js': ['tmp/es5/js/FloatingToolXYZS.js','tmp/es5/js/WindowXYZS.js','tmp/es5/tampermonkey-recruitment-tool.js']
                 }
             },
         }
