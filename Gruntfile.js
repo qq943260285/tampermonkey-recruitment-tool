@@ -15,7 +15,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: 'src/',
-                    src: ['*.js'],
+                    src: ['*.js', 'js/*.js'],
                     dest: 'tmp/es5'
                 }]
             }
@@ -78,14 +78,67 @@ module.exports = function (grunt) {
                 files: {
                     'dist/tampermonkey-recruitment-tool.min.js': ['tmp/tampermonkey-recruitment-tool.es5.js']
                 }
-            }
+            },
+            xyzsBuild2: {
+                options: {
+                    mangle: false,
+                    compress: {
+                        drop_console: true,
+                        sequences: true,
+                        conditionals: false,
+                        comparisons: true,
+                        booleans: true,
+                        loops: true,
+                        hoist_funs: true,
+                        if_return: false,
+                        inline: false,
+                        join_vars: true,
+                        reduce_vars: true,
+                        negate_iife: false,
+                        passes: 1,
+                    },
+                    preserveComments: false,
+                    beautify: true,
+                },
+                files: [{
+                    expand: true,
+                    cwd: 'tmp/es5',//js目录下
+                    src: '**/*.js',//所有js文件
+                    dest: 'dist'//输出到此目录下
+                }]
+            },
+            xyzsBuild3: {
+                options: {
+                    mangle: false,
+                    compress: {
+                        drop_console: true,
+                        sequences: true,
+                        conditionals: false,
+                        comparisons: true,
+                        booleans: true,
+                        loops: true,
+                        hoist_funs: true,
+                        if_return: false,
+                        inline: false,
+                        join_vars: true,
+                        reduce_vars: true,
+                        negate_iife: false,
+                        passes: 1,
+                    },
+                    preserveComments: false,
+                    beautify: true,
+                },
+                files: {
+                    'dist/tampermonkey-recruitment-tool.xx.js': ['tmp/es5/js/FloatingToolXYZS.js','tmp/es5/js/WindowXYZS.js','tmp/es5/tampermonkey-recruitment-tool.js']
+                }
+            },
         }
     });
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-babel');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.registerTask('default', ['watch']);//cmd:grunt
-    grunt.registerTask('xiaoyu', ['babel:dist', 'uglify:xyzsBuild',]);//cmd:grunt xiaoyu
+    grunt.registerTask('xiaoyu', ['babel:dist2', 'uglify:xyzsBuild3',]);//cmd:grunt xiaoyu
 }
 
 

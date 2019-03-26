@@ -1,161 +1,10 @@
 (function () {
     'use strict';
     console.log("xxx")
-    let toolSize = 50;
-    let positionLeft = true;
-    //控制展开
-    let isExpand = true;
     let body = $('body');
-    body.before(`<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />`)
     body.before(
         `<style>
-            .xyzs-tool-region{
-            position: fixed;
-             z-index: 20480;
-             left: 0;
-             top: 0;
-             width: 100%;
-             height: 100%;
-            }
-            .xyzs-tool{
-             background-color: #ff5c4c;
-             width: ` + toolSize + `px;
-             height: ` + toolSize + `px;
-             border-radius:` + toolSize / 2 + `px;
-             -moz-border-radius:` + toolSize / 2 + `px; 
-             position: absolute;
-             left: 10px;
-             bottom: 10px;
-             cursor: move;
-             pointer-events:auto;
-             -moz-box-shadow:1px 1px 10px rgba(82, 82, 82, 0.74);;
-             -webkit-box-shadow:1px 1px 10px rgba(82, 82, 82, 0.74);
-             box-shadow:1px 1px 10px rgba(82, 82, 82, 0.74);
-            }
-            .xyzs-tool .menu{
-            width: 200px;
-            height: 50px;
-            position: absolute;
-            left: ` + toolSize + `px;
-            display: none;
-            transition: display 3s;
-            padding: 0 10px;
-            }
-            .xyzs-tool .fa-tool{
-             font-size: 27px;
-             color: #FFF!important;
-            }
-            .xyzs-menu-item{
-            height: 30px;
-            width: 30px;
-            border-radius:15px;
-            float: left;
-            margin: 10px;
-            background-color: #ff5c4c;
-             -moz-box-shadow:1px 1px 10px rgba(82, 82, 82, 0.74);;
-             -webkit-box-shadow:1px 1px 10px rgba(82, 82, 82, 0.74);
-             box-shadow:1px 1px 10px rgba(82, 82, 82, 0.74);
-             text-align: center;
-            }
-            .xyzs-menu-item:hover{
-             -moz-box-shadow:1px 1px 15px rgb(35,35,35);
-             -webkit-box-shadow:1px 1px 15px rgb(35,35,35);
-             box-shadow:1px 1px 15px rgb(35,35,35);
-            }
-            .xyzs-menu-item .fa-item{
-                font-size: 20px;
-                margin: auto 0;
-                width: 30px;
-                height: 30px;
-                line-height: 30px;
-                cursor: pointer;
-                color: #fff;
-            }
-            .xyzs-menu-item .fa-item:hover{
-
-            }
-            /*===== win =====*/
-            .xyzs-win{
-                width: 500px;
-                margin: 0 auto;
-                position: relative;
-                outline: 0;
-                top: 100px;
-                pointer-events:auto;
-            }
-            .xyzs-modal-content{
-                border-radius: 5px;
-                background-clip: padding-box;
-                background-color: #fff;
-                -moz-box-shadow:1px 1px 10px rgba(82, 82, 82, 0.74);;
-                -webkit-box-shadow:1px 1px 10px rgba(82, 82, 82, 0.74);
-                box-shadow:1px 1px 10px rgba(82, 82, 82, 0.74);
-                pointer-events:auto;
-                border: solid 1px #ff5c4c;
-            }
-            .xyzs-modal-close{
-                z-index: 1;
-                position: absolute;
-                right: 12px;
-                top: 8px;
-                overflow: hidden;
-                cursor: pointer;
-            }
-            .xyzs-icon-ios-close{
-                font-size: 25px;
-                color: #999;
-            }
-            .xyzs-modal-header{
-                border-bottom: 1px solid #e8eaec;
-                padding: 10px 16px;
-                text-align: left;
-                font-size: 15px;
-                font-weight: bold;
-                font-family: cursive;
-            }
-            .xyzs-modal-body{
-                padding: 16px;
-                font-size: 12px;
-            }
-
-            .xyzs-enterprise-list{
-                width: 100%;
-                height: 300px;
-                overflow-y: auto;
-                overflow-x: hidden;
-            }
-            .xyzs-enterprise-item{
-                /*height: 20px;*/
-                line-height: 20px;
-                margin: 5px;
-                font-size: 12px;
-                padding: 5px 12px;
-                border: solid 1px #dedede;
-            }
-            .xyzs-enterprise-item-ico{
-                color: #ff5c4c;
-                float: right;
-                font-size: 18px;
-            }
-
-            .xyzs-scrollbar::-webkit-scrollbar-track {
-              -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-              background-color: #F5F5F5;
-              border-radius:5px
-            }
-
-            .xyzs-scrollbar::-webkit-scrollbar {
-              width: 10px;
-              background-color: #F5F5F5;
-            }
-
-            .xyzs-scrollbar::-webkit-scrollbar-thumb {
-              background-color: rgba(255,92,76,0.7);
-              border-radius:5px
-            }
-            .xyzs-scrollbar::-webkit-scrollbar-thumb:hover {
-              background-color: #ff5c4c;
-            }
+            
             /*=== 功能 ===*/
             .xyzs-del-div{
                 color: #ff5c4c;
@@ -168,82 +17,6 @@
             }
         </style>`
     );
-
-
-    let isMobile = false, mousedownPosition = {x: 0, y: 0}, toolPosition = {x: 0, y: 0};
-
-    let toolRegion = $('<div class="xyzs-tool-region"></div>').mousedown(function () {
-        //鼠标按下
-        // isMobile = true;
-        toolRegion.css('pointer-events', 'auto');
-
-    }).mouseup(function () {
-        //鼠标松开
-        isMobile = false;
-        toolRegion.css('pointer-events', 'none');
-    }).mousemove(function (e) {
-        //鼠标移动
-        if (isMobile) {
-
-            var mouseX = e.originalEvent.x || e.originalEvent.layerX || 0;
-            var mouseY = e.originalEvent.y || e.originalEvent.layerY || 0;
-
-            var Y = tool.position().top;
-            var X = tool.position().left;
-            var winH = $(window).height();
-            var winW = $(window).width();
-            toolPosition.x = X;
-            toolPosition.y = Y;
-
-            let left = X + mouseX - mousedownPosition.x;
-            let bottom = winH - toolSize - Y - mouseY + mousedownPosition.y;
-            tool.css({
-                "left": (left < 0 ? 0 : ((left + toolSize) > winW) ? (winW - toolSize) : left) + "px",
-                "bottom": (bottom < 0 ? 0 : ((bottom + toolSize) > winH) ? (winH - toolSize) : bottom) + "px"
-            });
-            if (positionLeft === ((winW / 2) < (X + toolSize / 2))) {
-                menu.css({
-                    "width": (menuItems.length * 50 + 20) + "px",
-                    "left": ((winW / 2) < (X + toolSize / 2) ? (-1 * (menuItems.length * 50 + 20)) : 50) + "px"
-                });
-                menuItems.reverse();
-                createMenu();
-                positionLeft = !positionLeft;
-            }
-            mousedownPosition.x = mouseX;
-            mousedownPosition.y = mouseY;
-        }
-    }).css('pointer-events', 'none');
-
-    let tool = $(`
-        <div class='xyzs-tool'>
-        <div style="position: absolute;text-align: center;width: 50px;top: 10px;color: #fff;">
-        <i class="fa fa-wrench fa-tool" title="工具箱"></i>
-        </div>
-        </div>`
-    ).mouseleave(function () {
-        //鼠标移出
-        menu.hide(70);
-    }).mouseenter(function () {
-        //鼠标移入
-        menu.show(70);
-    }).mousedown(function (e) {
-        //鼠标按下
-        isMobile = true;
-        isExpand = true;
-        toolRegion.css('pointer-events', 'auto');
-        mousedownPosition.x = e.originalEvent.x || e.originalEvent.layerX || 0;
-        mousedownPosition.y = e.originalEvent.y || e.originalEvent.layerY || 0;
-    }).mousemove(function () {
-        //鼠标移动
-        isExpand = false;
-    }).click(function () {
-        //鼠标点击
-        if (isExpand) {
-            menu.toggle();
-        }
-    }).css({"left": "10px", "bottom": "10px"});
-
 
     let menuItems = [
         {
@@ -264,7 +37,7 @@
                         )
                     )
                 });
-                showWin("黑名单管理", div);
+                $.WindowXYZS("黑名单管理", div).showWin("黑名单管理", div)
             }
         },
         // {
@@ -291,58 +64,9 @@
             }
         },
     ];
+    $.FloatingToolXYZS(menuItems);
 
 
-    var menu = $(`
-    <div id='xyzs-menu' class='menu'>
-    </div>
-    `).css({"width": (menuItems.length * 50 + 20) + "px"});
-
-    var createMenu = function () {
-        menu.empty();
-        for (let i = 0; i < menuItems.length; i++) {
-            menu.append($('<div class="xyzs-menu-item"><i class="fa ' + menuItems[i].ico + ' fa-item " title="' + menuItems[i].title + '"></i></div>').click(
-                function () {
-                    menuItems[i].callback();
-                }
-            ));
-        }
-    };
-
-    createMenu();
-    tool.append(menu);
-    toolRegion.append(tool);
-    body.append(toolRegion);
-
-    //========== 窗口 ==========
-    let win = $(`
-        <div class="xyzs-win">
-            <div class="xyzs-modal-content">
-                <div class="xyzs-modal-close">
-                    <i title="关闭" class="fa fa-remove xyzs-icon-ios-close"></i>
-                </div>
-                <div class="xyzs-modal-header">
-                    <div class="xyzs-modal-header-inner">标题</div>
-                </div>
-                <div class="xyzs-modal-body">
-                    内容
-                </div>
-            </div>
-        </div>
-    `).hide();
-    win.find('.xyzs-modal-close').click(function () {
-        win.hide();
-        toolRegion.css({"background-color": ""});
-    });
-
-    function showWin(t, div) {
-        toolRegion.css({'pointer-events': 'auto', "background-color": "rgba(55,55,55,.6)"});
-        win.show(500);
-        win.find(".xyzs-modal-header-inner").text(t);
-        win.find('.xyzs-modal-body').empty().append(div);
-    }
-
-    toolRegion.append(win);
 
     //========== 功能相关 ==========
     let blacklistKey = 'blacklist'
