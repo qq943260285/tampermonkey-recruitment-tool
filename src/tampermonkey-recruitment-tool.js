@@ -2,6 +2,7 @@
     'use strict';
     console.log("xxx")
     let body = $('body');
+    body.before('<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />');
     body.before(
         `<style>
             
@@ -67,7 +68,6 @@
     $.FloatingToolXYZS(menuItems);
 
 
-
     //========== 功能相关 ==========
     let blacklistKey = 'blacklist'
         , blacklistList = GM_getValue(blacklistKey) ? JSON.parse(GM_getValue(blacklistKey)) : []
@@ -94,7 +94,7 @@
         {
             WebUrl: "search.51job.com",
             IsRefresh: false,
-            DleButtonStyle: 'margin: 0 10px;display: contents;',
+            DleButtonStyle: 'margin: 0 10px;display: inline;position: absolute;',
             HtmlToList: () => $('.el .t2 a[title]').closest('.el'),
             ItemToNameJq: (item) => $(item).find('.t2 a[title]'),
             NameJqToNameText: (item) => $(item).attr('title'),
