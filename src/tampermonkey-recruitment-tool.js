@@ -7,13 +7,28 @@
         `<style>
             
             /*=== 功能 ===*/
+            .xyzs-features-div{
+                background: #fff;
+            }
             .xyzs-del-div{
                 color: #ff5c4c;
                 font-size: 20px;
                 cursor: pointer;
+                float: left;
+                margin: 0 3px;
+            }
+            .xyzs-search-div{
+                color: #ff5c4c;
+                font-size: 20px;
+                cursor: pointer;
+                float: left;
+                margin: 0 3px;
+            }
+            
+            .xyzs-search-ico{
+                color: #ff5c4c!important;
             }
             .xyzs-del-ico{
-            
                 color: #ff5c4c!important;
             }
         </style>`
@@ -29,7 +44,7 @@
                     <div class="xyzs-enterprise-list xyzs-scrollbar" ></div>
                 `);
                 $.each(blacklistList, function (index, item) {
-                    div.append($(`<div class="xyzs-enterprise-item">` + item + `</div>`)
+                    div.prepend($(`<div class="xyzs-enterprise-item">` + item + `</div>`)
                         .append($(`<i class="fa fa-times xyzs-enterprise-item-ico" title="删除" item-name="` + item + `"></i>`)
                             .click(function () {
                                 dleDlacklistName($(this).attr('item-name'));
@@ -94,7 +109,8 @@
         {
             WebUrl: "search.51job.com",
             IsRefresh: false,
-            DleButtonStyle: 'margin: 0 10px;display: inline;position: absolute;',
+            //margin: 0 10px;display: inline;position: absolute;
+            DleButtonStyle: 'position: absolute;left: 295px;display: inline-flex;',
             HtmlToList: () => $('.el .t2 a[title]').closest('.el'),
             ItemToNameJq: (item) => $(item).find('.t2 a[title]'),
             NameJqToNameText: (item) => $(item).attr('title'),
@@ -112,7 +128,7 @@
         {
             WebUrl: "www.zhipin.com",
             IsRefresh: false,
-            DleButtonStyle: 'margin: 0 10px;display: inline-table;',
+            DleButtonStyle: 'float: left;',
             HtmlToList: () => $('.company-text h3 a[ka]').closest('li'),
             ItemToNameJq: (item) => $(item).find('.company-text h3 a[ka]'),
             NameJqToNameText: (item) => $(item).text(),
@@ -121,7 +137,7 @@
         {
             WebUrl: "www.lagou.com",
             IsRefresh: false,
-            DleButtonStyle: 'margin: 0 10px;display: inline-table;',
+            DleButtonStyle: 'float: left;',
             HtmlToList: () => $('li .company_name a[data-lg-tj-cid]').closest('li'),
             ItemToNameJq: (item) => $(item).find('.company_name a[data-lg-tj-cid]'),
             NameJqToNameText: (item) => $(item).text(),
@@ -130,7 +146,7 @@
         {
             WebUrl: "www.liepin.com",
             IsRefresh: false,
-            DleButtonStyle: 'margin: 0 10px;display: inline-flex;position: absolute;right: 12px;',
+            DleButtonStyle: 'display: inline-flex;position: absolute;right: 280px;',
             HtmlToList: () => $('li .company-name a[title]').closest('li'),
             ItemToNameJq: (item) => $(item).find('.company-name a[title]'),
             NameJqToNameText: (item) => $(item).text(),
@@ -215,8 +231,8 @@
     function createDelDiv() {
         blacklistFunction.HtmlToList().each(function (index, element) {
             if ($(element).find('.xyzs-del-div').length === 0) {
-                blacklistFunction.ItemToNameJq(element).after(
-                    $('<div title="加入黑名单" style="' + blacklistFunction.DleButtonStyle + '" class="xyzs-del-div"><i class="fa fa-trash xyzs-del-ico"></i></div>')
+                blacklistFunction.ItemToNameJq(element).after($('<div style="' + blacklistFunction.DleButtonStyle+'" class="xyzs-features-div"></div>').append(
+                    $('<div title="加入黑名单" class="xyzs-del-div"><i class="fa fa-trash xyzs-del-ico"></i></div>')
                         .click(function () {
                             addDlacklistName(
                                 blacklistFunction.NameJqToNameText(
@@ -227,7 +243,27 @@
                             );
                             return false;
                         })
-                )
+                ).append(
+
+                    //企查查
+                    //https://www.qichacha.com/material/theme/chacha/cms/v2/images/favicon.png
+                    //https://www.qichacha.com/search?key=瑞多思
+                    //天眼查
+                    //https://cdn.tianyancha.com/wap/images/18blue/weixinlogo.png
+                    //https://www.tianyancha.com/search?key=瑞多思
+                    $('<div title="企业查询" class="xyzs-search-div"><i class="fa fa-search xyzs-search-ico"></i></div>')
+                        .click(function () {
+                            window.open('https://www.tianyancha.com/search?key='+
+                                encodeURI(
+                                blacklistFunction.NameJqToNameText(
+                                    blacklistFunction.ItemToNameJq(
+                                        blacklistFunction.DleButtonToItem(this)
+                                    )
+                                )));
+
+                            return false;
+                        })
+                ))
             }
         });
     }

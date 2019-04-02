@@ -1,18 +1,19 @@
 // ==UserScript==
 // @name         高级求职助手/招聘网站助手，支持前程无忧、智联招聘、BOSS直聘、拉钩、猎聘
 // @namespace    https://github.com/qq943260285
-// @version      1.4
+// @version      1.5
 // @description  1.快捷添加企业黑名单；2.支持正则表达式黑名单；3.支持前程无忧、智联招聘、BOSS直聘、拉钩、猎聘;4.各大网站黑名单数据连通。
 // @author       小宇专属(943260285@qq.com)
 // @license      GPL-3.0-only
 // @icon         https://qq943260285.github.io/favicon.png
 // @create       2019-03-25
-// @lastmodified 2019-04-01
+// @lastmodified 2019-04-03
 // @home-url     https://greasyfork.org/zh-TW/scripts/380848
 // @supportURL   https://github.com/qq943260285/tampermonkey-recruitment-tool.git
 // @feedback-url https://github.com/qq943260285/tampermonkey-recruitment-tool.git
 // @note         2019.03.25-V1.3 初始化项目添加黑名单功能，后续视情况添加功能
 // @note         2019.04.01-V1.4 修复51job失效，添加个性动画，优化代码
+// @note         2019.04.03-V1.5 添加天眼查（企业查询），调整部分样式
 // @match        *://search.51job.com/*
 // @match        *://sou.zhaopin.com/*
 // @match        *://www.zhipin.com/*
@@ -116,13 +117,16 @@
     function blacklistRefresh() {
         blacklistFilter(), function() {
             blacklistFunction.HtmlToList().each(function(index, element) {
-                if (0 === $(element).find(".xyzs-del-div").length) blacklistFunction.ItemToNameJq(element).after($('<div title="加入黑名单" style="' + blacklistFunction.DleButtonStyle + '" class="xyzs-del-div"><i class="fa fa-trash xyzs-del-ico"></i></div>').click(function() {
+                if (0 === $(element).find(".xyzs-del-div").length) blacklistFunction.ItemToNameJq(element).after($('<div style="' + blacklistFunction.DleButtonStyle + '" class="xyzs-features-div"></div>').append($('<div title="加入黑名单" class="xyzs-del-div"><i class="fa fa-trash xyzs-del-ico"></i></div>').click(function() {
                     return function(name) {
                         if (name += "", -1 === blacklistList.indexOf(name)) blacklistList.push(name), GM_setValue(blacklistKey, JSON.stringify(blacklistList));
                         blacklistFilter();
                     }(blacklistFunction.NameJqToNameText(blacklistFunction.ItemToNameJq(blacklistFunction.DleButtonToItem(this)))), 
                     !1;
-                }));
+                })).append($('<div title="企业查询" class="xyzs-search-div"><i class="fa fa-search xyzs-search-ico"></i></div>').click(function() {
+                    return window.open("https://www.tianyancha.com/search?key=" + encodeURI(blacklistFunction.NameJqToNameText(blacklistFunction.ItemToNameJq(blacklistFunction.DleButtonToItem(this))))), 
+                    !1;
+                })));
             });
         }();
     }
@@ -138,14 +142,14 @@
     }
     var body = $("body");
     body.before('<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />'), 
-    body.before("<style>\n            \n            /*=== 功能 ===*/\n            .xyzs-del-div{\n                color: #ff5c4c;\n                font-size: 20px;\n                cursor: pointer;\n            }\n            .xyzs-del-ico{\n            \n                color: #ff5c4c!important;\n            }\n        </style>");
+    body.before("<style>\n            \n            /*=== 功能 ===*/\n            .xyzs-features-div{\n                background: #fff;\n            }\n            .xyzs-del-div{\n                color: #ff5c4c;\n                font-size: 20px;\n                cursor: pointer;\n                float: left;\n                margin: 0 3px;\n            }\n            .xyzs-search-div{\n                color: #ff5c4c;\n                font-size: 20px;\n                cursor: pointer;\n                float: left;\n                margin: 0 3px;\n            }\n            \n            .xyzs-search-ico{\n                color: #ff5c4c!important;\n            }\n            .xyzs-del-ico{\n                color: #ff5c4c!important;\n            }\n        </style>");
     var menuItems = [ {
         ico: "fa-eye-slash",
         title: "黑名单管理",
         callback: function() {
             var div = $('\n                    <div class="xyzs-enterprise-list xyzs-scrollbar" ></div>\n                ');
             $.each(blacklistList, function(index, item) {
-                div.append($('<div class="xyzs-enterprise-item">' + item + "</div>").append($('<i class="fa fa-times xyzs-enterprise-item-ico" title="删除" item-name="' + item + '"></i>').click(function() {
+                div.prepend($('<div class="xyzs-enterprise-item">' + item + "</div>").append($('<i class="fa fa-times xyzs-enterprise-item-ico" title="删除" item-name="' + item + '"></i>').click(function() {
                     (function(name) {
                         if (-1 < blacklistList.indexOf(name)) blacklistList.splice(blacklistList.indexOf(name), 1), 
                         GM_setValue(blacklistKey, JSON.stringify(blacklistList));
@@ -179,7 +183,7 @@
     }, WebJqList = [ {
         WebUrl: "search.51job.com",
         IsRefresh: !1,
-        DleButtonStyle: "margin: 0 10px;display: inline;position: absolute;",
+        DleButtonStyle: "position: absolute;left: 295px;display: inline-flex;",
         HtmlToList: function() {
             return $(".el .t2 a[title]").closest(".el");
         },
@@ -211,7 +215,7 @@
     }, {
         WebUrl: "www.zhipin.com",
         IsRefresh: !1,
-        DleButtonStyle: "margin: 0 10px;display: inline-table;",
+        DleButtonStyle: "float: left;",
         HtmlToList: function() {
             return $(".company-text h3 a[ka]").closest("li");
         },
@@ -227,7 +231,7 @@
     }, {
         WebUrl: "www.lagou.com",
         IsRefresh: !1,
-        DleButtonStyle: "margin: 0 10px;display: inline-table;",
+        DleButtonStyle: "float: left;",
         HtmlToList: function() {
             return $("li .company_name a[data-lg-tj-cid]").closest("li");
         },
@@ -243,7 +247,7 @@
     }, {
         WebUrl: "www.liepin.com",
         IsRefresh: !1,
-        DleButtonStyle: "margin: 0 10px;display: inline-flex;position: absolute;right: 12px;",
+        DleButtonStyle: "display: inline-flex;position: absolute;right: 280px;",
         HtmlToList: function() {
             return $("li .company-name a[title]").closest("li");
         },
