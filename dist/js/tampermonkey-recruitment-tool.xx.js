@@ -13,7 +13,7 @@
 // @feedback-url https://github.com/qq943260285/tampermonkey-recruitment-tool.git
 // @note         2019.03.25-V1.3 初始化项目添加黑名单功能，后续视情况添加功能
 // @note         2019.04.01-V1.4 修复51job失效，添加个性动画，优化代码
-// @note         2019.04.03-V1.5 添加天眼查（企业查询），调整部分样式
+// @note         2019.04.03-V1.5 添加天眼查（企业查询），调整部分样式，调整黑名单显示顺序
 // @match        *://search.51job.com/*
 // @match        *://sou.zhaopin.com/*
 // @match        *://www.zhipin.com/*

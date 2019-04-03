@@ -169,9 +169,9 @@
         blacklistRefresh();
         if (blacklistFunction.IsRefresh) setInterval(blacklistRefresh, 3000);
     }
-
     //====== 刷新 ======
     function blacklistRefresh() {
+        console.log("---")
         //过滤列表
         blacklistFilter();
         //添加按钮
@@ -191,7 +191,7 @@
                 for (let i = 0; i < blacklistList.length; i++) {
                     if (new RegExp(blacklistList[i], 'i').test(name)) {
                         isShow = false;
-                        // console.log(blacklistList[i] + '正则表达式过滤,' + name);
+                        console.log(blacklistList[i] + '正则表达式过滤,' + name);
                         break;
                     }
                 }
@@ -201,6 +201,7 @@
             } else {
                 $(element).hide();
             }
+            console.log("***")
         });
     }
 
@@ -231,6 +232,7 @@
     function createDelDiv() {
         blacklistFunction.HtmlToList().each(function (index, element) {
             if ($(element).find('.xyzs-del-div').length === 0) {
+                console.log("*-*")
                 blacklistFunction.ItemToNameJq(element).after($('<div style="' + blacklistFunction.DleButtonStyle+'" class="xyzs-features-div"></div>').append(
                     $('<div title="加入黑名单" class="xyzs-del-div"><i class="fa fa-trash xyzs-del-ico"></i></div>')
                         .click(function () {
