@@ -136,7 +136,7 @@
         },
         {
             WebUrl: "www.lagou.com",
-            IsRefresh: false,
+            IsRefresh: true,
             DleButtonStyle: 'float: left;',
             HtmlToList: () => $('li .company_name a[data-lg-tj-cid]').closest('li'),
             ItemToNameJq: (item) => $(item).find('.company_name a[data-lg-tj-cid]'),
@@ -151,6 +151,24 @@
             ItemToNameJq: (item) => $(item).find('.company-name a[title]'),
             NameJqToNameText: (item) => $(item).text(),
             DleButtonToItem: (item) => $(item).closest('li')
+        },
+        {
+            WebUrl: ".58.com",
+            IsRefresh: false,
+            DleButtonStyle: 'background: transparent;top: 12px;position: absolute;left: -50px;',
+            HtmlToList: () => $('#list_con li .comp_name a[title]').closest('li'),
+            ItemToNameJq: (item) => $(item).find('.comp_name a[title]'),
+            NameJqToNameText: (item) => $(item).text(),
+            DleButtonToItem: (item) => $(item).closest('li')
+        },
+        {
+            WebUrl: "zhaopin.baidu.com",
+            IsRefresh: true,
+            DleButtonStyle: 'background: transparent;top: 12px;position: absolute;left: -50px;',
+            HtmlToList: () => $('.listitem .single .companyname').closest('.single'),
+            ItemToNameJq: (item) => $(item).find('.companyname'),
+            NameJqToNameText: (item) => $(item).text(),
+            DleButtonToItem: (item) => $(item).closest('.single')
         }];
 
     //====== 初始化 =======
@@ -160,7 +178,7 @@
         for (let i = 0; i < WebJqList.length; i++) {
             // console.log(window.location.host);
 
-            if (WebJqList[i].WebUrl === window.location.host) {
+            if (window.location.host.indexOf(WebJqList[i].WebUrl) != -1) {
                 blacklistFunction = WebJqList[i];
                 break;
             }
@@ -169,6 +187,7 @@
         blacklistRefresh();
         if (blacklistFunction.IsRefresh) setInterval(blacklistRefresh, 3000);
     }
+
     //====== 刷新 ======
     function blacklistRefresh() {
         console.log("---")
@@ -233,7 +252,7 @@
         blacklistFunction.HtmlToList().each(function (index, element) {
             if ($(element).find('.xyzs-del-div').length === 0) {
                 console.log("*-*")
-                blacklistFunction.ItemToNameJq(element).after($('<div style="' + blacklistFunction.DleButtonStyle+'" class="xyzs-features-div"></div>').append(
+                blacklistFunction.ItemToNameJq(element).after($('<div style="' + blacklistFunction.DleButtonStyle + '" class="xyzs-features-div"></div>').append(
                     $('<div title="加入黑名单" class="xyzs-del-div"><i class="fa fa-trash xyzs-del-ico"></i></div>')
                         .click(function () {
                             addDlacklistName(
@@ -246,7 +265,6 @@
                             return false;
                         })
                 ).append(
-
                     //企查查
                     //https://www.qichacha.com/material/theme/chacha/cms/v2/images/favicon.png
                     //https://www.qichacha.com/search?key=瑞多思
@@ -255,13 +273,13 @@
                     //https://www.tianyancha.com/search?key=瑞多思
                     $('<div title="企业查询" class="xyzs-search-div"><i class="fa fa-search xyzs-search-ico"></i></div>')
                         .click(function () {
-                            window.open('https://www.tianyancha.com/search?key='+
+                            window.open('https://www.tianyancha.com/search?key=' +
                                 encodeURI(
-                                blacklistFunction.NameJqToNameText(
-                                    blacklistFunction.ItemToNameJq(
-                                        blacklistFunction.DleButtonToItem(this)
-                                    )
-                                )));
+                                    blacklistFunction.NameJqToNameText(
+                                        blacklistFunction.ItemToNameJq(
+                                            blacklistFunction.DleButtonToItem(this)
+                                        )
+                                    )));
 
                             return false;
                         })

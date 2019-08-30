@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         高级求职助手/招聘网站助手，支持前程无忧、智联招聘、BOSS直聘、拉钩、猎聘
 // @namespace    https://github.com/qq943260285
-// @version      1.5
+// @version      1.6
 // @description  1.快捷添加企业黑名单；2.支持正则表达式黑名单；3.支持前程无忧、智联招聘、BOSS直聘、拉钩、猎聘;4.各大网站黑名单数据连通。
 // @author       小宇专属(943260285@qq.com)
 // @license      GPL-3.0-only
@@ -19,6 +19,8 @@
 // @match        *://www.zhipin.com/*
 // @match        *://www.lagou.com/*
 // @match        *://www.liepin.com/*
+// @match        *://*.58.com/job/*
+// @match        *://zhaopin.baidu.com/quanzhi*
 // @require      https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js
 // @grant        GM_getValue
 // @grant        GM.getValue
@@ -230,7 +232,7 @@
         }
     }, {
         WebUrl: "www.lagou.com",
-        IsRefresh: !1,
+        IsRefresh: !0,
         DleButtonStyle: "float: left;",
         HtmlToList: function() {
             return $("li .company_name a[data-lg-tj-cid]").closest("li");
@@ -260,9 +262,41 @@
         DleButtonToItem: function(item) {
             return $(item).closest("li");
         }
+    }, {
+        WebUrl: ".58.com",
+        IsRefresh: !1,
+        DleButtonStyle: "background: transparent;top: 12px;position: absolute;left: -50px;",
+        HtmlToList: function() {
+            return $("#list_con li .comp_name a[title]").closest("li");
+        },
+        ItemToNameJq: function(item) {
+            return $(item).find(".comp_name a[title]");
+        },
+        NameJqToNameText: function(item) {
+            return $(item).text();
+        },
+        DleButtonToItem: function(item) {
+            return $(item).closest("li");
+        }
+    }, {
+        WebUrl: "zhaopin.baidu.com",
+        IsRefresh: !0,
+        DleButtonStyle: "background: transparent;top: 12px;position: absolute;left: -50px;",
+        HtmlToList: function() {
+            return $(".listitem .single .companyname").closest(".single");
+        },
+        ItemToNameJq: function(item) {
+            return $(item).find(".companyname");
+        },
+        NameJqToNameText: function(item) {
+            return $(item).text();
+        },
+        DleButtonToItem: function(item) {
+            return $(item).closest(".single");
+        }
     } ];
     (function() {
-        for (var i = 0; i < WebJqList.length; i++) if (WebJqList[i].WebUrl === window.location.host) {
+        for (var i = 0; i < WebJqList.length; i++) if (-1 != window.location.host.indexOf(WebJqList[i].WebUrl)) {
             blacklistFunction = WebJqList[i];
             break;
         }
