@@ -136,20 +136,17 @@ module.exports = function (grunt) {
 // @license      GPL-3.0-only
 // @icon         https://qq943260285.github.io/favicon.png
 // @create       2019-03-25
-// @lastmodified 2019-04-03
+// @lastmodified 2019-09-24
 // @home-url     https://greasyfork.org/zh-TW/scripts/380848
 // @supportURL   https://github.com/qq943260285/tampermonkey-recruitment-tool.git
 // @feedback-url https://github.com/qq943260285/tampermonkey-recruitment-tool.git
-// @note         2019.03.25-V1.3 初始化项目添加黑名单功能，后续视情况添加功能
-// @note         2019.04.01-V1.4 修复51job失效，添加个性动画，优化代码
-// @note         2019.04.03-V1.5 添加天眼查（企业查询），调整部分样式，调整黑名单显示顺序
-// @note         2019.09.01-V2.0 添加百度百聘、58同城支持，添加导航，修复部分BUG，调整部分样式（感谢反馈的朋友，欢迎大家反馈提意见）
+// @note         2019.09.24-V2.0 添加百度百聘、58同城支持，添加导航，修复部分BUG，调整部分样式（感谢反馈的朋友，欢迎大家反馈提意见）
 // @match        *://search.51job.com/*
 // @match        *://sou.zhaopin.com/*
 // @match        *://www.zhipin.com/*
 // @match        *://www.lagou.com/*
 // @match        *://www.liepin.com/*
-// @match        *://*.58.com/job/*
+// @match        *://*.58.com/*
 // @match        *://zhaopin.baidu.com/quanzhi*
 // @require      https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js
 // @grant        GM_getValue

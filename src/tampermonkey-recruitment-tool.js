@@ -218,7 +218,7 @@
                 WebName: "百度招聘",
                 WebUrl: "zhaopin.baidu.com",
                 IsRefresh: true,
-                DleButtonStyle: 'background: transparent;top: 12px;position: absolute;left: -50px;',
+                DleButtonStyle: 'background: transparent;top: 0;position: absolute;left: -10px;',
                 HtmlToList: () => $('.listitem .single .companyname').closest('.single'),
                 ItemToNameJq: (item) => $(item).find('.companyname'),
                 NameJqToNameText: (item) => $(item).text(),
