@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         高级求职助手/招聘网站助手，支持前程无忧、智联招聘、BOSS直聘、拉钩、猎聘
+// @name         高级求职助手/招聘网站助手，支持前程无忧、智联招聘、BOSS直聘、拉钩网、猎聘网、百度百聘、58同城
 // @namespace    https://github.com/qq943260285
-// @version      1.6
-// @description  1.快捷添加企业黑名单；2.支持正则表达式黑名单；3.支持前程无忧、智联招聘、BOSS直聘、拉钩、猎聘;4.各大网站黑名单数据连通。
+// @version      2.0
+// @description  1.快捷添加企业黑名单；2.支持正则表达式黑名单；3.支持前程无忧、智联招聘、BOSS直聘、拉钩网、猎聘网、百度百聘、58同城;4.各大网站黑名单数据连通。
 // @author       小宇专属(943260285@qq.com)
 // @license      GPL-3.0-only
 // @icon         https://qq943260285.github.io/favicon.png
@@ -14,6 +14,7 @@
 // @note         2019.03.25-V1.3 初始化项目添加黑名单功能，后续视情况添加功能
 // @note         2019.04.01-V1.4 修复51job失效，添加个性动画，优化代码
 // @note         2019.04.03-V1.5 添加天眼查（企业查询），调整部分样式，调整黑名单显示顺序
+// @note         2019.09.01-V2.0 添加百度百聘、58同城支持，添加导航，修复部分BUG，调整部分样式（感谢反馈的朋友，欢迎大家反馈提意见）
 // @match        *://search.51job.com/*
 // @match        *://sou.zhaopin.com/*
 // @match        *://www.zhipin.com/*
@@ -110,7 +111,7 @@
                     winRegion.css({
                         "pointer-events": "auto",
                         "background-color": "rgba(55,55,55,.6)"
-                    }), win.show(500), win.find(".xyzs-modal-header-inner").text(winTitle), win.find(".xyzs-modal-body").empty().append(winDiv);
+                    }), win.show(500), win.find(".xyzs-modal-header-inner").html(winTitle), win.find(".xyzs-modal-body").empty().append(winDiv);
                 }
             };
         }
@@ -144,21 +145,32 @@
     }
     var body = $("body");
     body.before('<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />'), 
-    body.before("<style>\n            \n            /*=== 功能 ===*/\n            .xyzs-features-div{\n                background: #fff;\n            }\n            .xyzs-del-div{\n                color: #ff5c4c;\n                font-size: 20px;\n                cursor: pointer;\n                float: left;\n                margin: 0 3px;\n            }\n            .xyzs-search-div{\n                color: #ff5c4c;\n                font-size: 20px;\n                cursor: pointer;\n                float: left;\n                margin: 0 3px;\n            }\n            \n            .xyzs-search-ico{\n                color: #ff5c4c!important;\n            }\n            .xyzs-del-ico{\n                color: #ff5c4c!important;\n            }\n        </style>");
+    body.before("<style>\n            \n            /*=== 功能 ===*/\n            /*.xyzs-features-div{*/\n                /*background: #fff;*/\n            /*}*/\n            .xyzs-del-div{\n                color: #ff5c4c;\n                font-size: 20px;\n                cursor: pointer;\n                float: left;\n                margin: 0 3px;\n            }\n            .xyzs-search-div{\n                color: #ff5c4c;\n                font-size: 20px;\n                cursor: pointer;\n                float: left;\n                margin: 0 3px;\n            }\n            \n            .xyzs-search-ico{\n                color: #ff5c4c!important;\n            }\n            .xyzs-del-ico{\n                color: #ff5c4c!important;\n            }\n            .xyzs-enterprise-item{\n                border-radius: 10px;\n                color: #666;\n            }\n            .xyzs-enterprise-item:hover{\n                background-color: rgba(255,96,80,0.15);\n            }\n            .xyzs-enterprise-item-ico{\n                cursor:pointer;\n            }\n            \n            .xyzs-stand-item{\n                cursor: pointer;\n                margin: 0 10px;\n                padding: 5px 15px;\n            }\n            .xyzs-stand-item:hover{\n                background-color: rgba(255,96,80,0.15);\n            }\n            .xyzs-stand-item img{\n                color: #333;\n            }\n            .xyzs-stand-item span{\n                color: #666;\n                margin-left: 10px;\n                font-size: 14px;\n            }\n        </style>");
     var menuItems = [ {
         ico: "fa-eye-slash",
         title: "黑名单管理",
         callback: function() {
             var div = $('\n                    <div class="xyzs-enterprise-list xyzs-scrollbar" ></div>\n                ');
             $.each(blacklistList, function(index, item) {
-                div.prepend($('<div class="xyzs-enterprise-item">' + item + "</div>").append($('<i class="fa fa-times xyzs-enterprise-item-ico" title="删除" item-name="' + item + '"></i>').click(function() {
+                div.prepend($('<div class="xyzs-enterprise-item">' + item + "</div>").append($('<i class="fa fa-times xyzs-enterprise-item-ico" title="移除/恢复" item-name="' + item + '"></i>').click(function() {
                     (function(name) {
                         if (-1 < blacklistList.indexOf(name)) blacklistList.splice(blacklistList.indexOf(name), 1), 
                         GM_setValue(blacklistKey, JSON.stringify(blacklistList));
                         blacklistFilter();
                     })($(this).attr("item-name")), $(this).closest(".xyzs-enterprise-item").remove();
                 })));
-            }), $.WindowXYZS().show("黑名单管理", div);
+            }), $.WindowXYZS().show("黑名单管理  <span onclick='window.open(\"https://github.com/qq943260285/tampermonkey-recruitment-tool/issues\",\"_blank\");' title='点击反馈' style='cursor:pointer;font-size: 9px;color: #ff5c4c;'>[欢迎提建议和反馈问题（点击）]</span>", div);
+        }
+    }, {
+        ico: "fa-magic",
+        title: "支持网站",
+        callback: function() {
+            var div = $('\n                    <div class="xyzs-stand-list xyzs-scrollbar" ></div>\n                ');
+            $.each(WebJqList, function(index, item) {
+                div.append($('<div class="xyzs-stand-item" title="点击访问：' + item.WebName + '"><img style="width: 16px;height: 16px;" src="//' + item.WebUrl + '/favicon.ico"><span>' + item.WebName + "</span></div>").click(function() {
+                    window.open("//" + item.WebUrl, "_blank");
+                }).append($('<i class="fa fa-arrow-right xyzs-enterprise-item-ico"></i>')));
+            }), $.WindowXYZS().show("支持网站  <span onclick='window.open(\"https://github.com/qq943260285/tampermonkey-recruitment-tool/issues\",\"_blank\");' title='点击反馈' style='cursor:pointer;font-size: 9px;color: #ff5c4c;'>[欢迎提建议和反馈问题（点击）]</span>", div);
         }
     }, {
         ico: "fa-podcast",
@@ -175,6 +187,7 @@
     } ];
     $.FloatingToolXYZS(menuItems);
     var blacklistKey = "blacklist", blacklistList = GM_getValue(blacklistKey) ? JSON.parse(GM_getValue(blacklistKey)) : [], blacklistFunction = {
+        WebName: null,
         WebUrl: null,
         IsRefresh: null,
         DleButtonStyle: null,
@@ -183,6 +196,7 @@
         NameJqToNameText: function() {},
         DleButtonToItem: function() {}
     }, WebJqList = [ {
+        WebName: "前程无忧",
         WebUrl: "search.51job.com",
         IsRefresh: !1,
         DleButtonStyle: "position: absolute;left: 295px;display: inline-flex;",
@@ -199,6 +213,7 @@
             return $(item).closest(".el");
         }
     }, {
+        WebName: "智联招聘",
         WebUrl: "sou.zhaopin.com",
         IsRefresh: !0,
         DleButtonStyle: "margin: 0 10px;display: inline-table;",
@@ -215,6 +230,7 @@
             return $(item).closest(".clearfix");
         }
     }, {
+        WebName: "BOSS直聘",
         WebUrl: "www.zhipin.com",
         IsRefresh: !1,
         DleButtonStyle: "float: left;",
@@ -231,6 +247,7 @@
             return $(item).closest("li");
         }
     }, {
+        WebName: "拉勾网",
         WebUrl: "www.lagou.com",
         IsRefresh: !0,
         DleButtonStyle: "float: left;",
@@ -247,6 +264,7 @@
             return $(item).closest("li");
         }
     }, {
+        WebName: "猎聘网",
         WebUrl: "www.liepin.com",
         IsRefresh: !1,
         DleButtonStyle: "display: inline-flex;position: absolute;right: 280px;",
@@ -263,7 +281,8 @@
             return $(item).closest("li");
         }
     }, {
-        WebUrl: ".58.com",
+        WebName: "58同城",
+        WebUrl: "58.com",
         IsRefresh: !1,
         DleButtonStyle: "background: transparent;top: 12px;position: absolute;left: -50px;",
         HtmlToList: function() {
@@ -279,6 +298,7 @@
             return $(item).closest("li");
         }
     }, {
+        WebName: "百度招聘",
         WebUrl: "zhaopin.baidu.com",
         IsRefresh: !0,
         DleButtonStyle: "background: transparent;top: 12px;position: absolute;left: -50px;",

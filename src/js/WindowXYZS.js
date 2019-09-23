@@ -135,7 +135,7 @@
                         console.log("---" + winTitle)
                         winRegion.css({'pointer-events': 'auto', "background-color": "rgba(55,55,55,.6)"});
                         win.show(500);
-                        win.find(".xyzs-modal-header-inner").text(winTitle);
+                        win.find(".xyzs-modal-header-inner").html(winTitle);
                         win.find('.xyzs-modal-body').empty().append(winDiv);
                     }
                 }

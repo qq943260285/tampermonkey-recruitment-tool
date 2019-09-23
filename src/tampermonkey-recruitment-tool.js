@@ -7,9 +7,9 @@
         `<style>
             
             /*=== 功能 ===*/
-            .xyzs-features-div{
-                background: #fff;
-            }
+            /*.xyzs-features-div{*/
+                /*background: #fff;*/
+            /*}*/
             .xyzs-del-div{
                 color: #ff5c4c;
                 font-size: 20px;
@@ -31,6 +31,33 @@
             .xyzs-del-ico{
                 color: #ff5c4c!important;
             }
+            .xyzs-enterprise-item{
+                border-radius: 10px;
+                color: #666;
+            }
+            .xyzs-enterprise-item:hover{
+                background-color: rgba(255,96,80,0.15);
+            }
+            .xyzs-enterprise-item-ico{
+                cursor:pointer;
+            }
+            
+            .xyzs-stand-item{
+                cursor: pointer;
+                margin: 0 10px;
+                padding: 5px 15px;
+            }
+            .xyzs-stand-item:hover{
+                background-color: rgba(255,96,80,0.15);
+            }
+            .xyzs-stand-item img{
+                color: #333;
+            }
+            .xyzs-stand-item span{
+                color: #666;
+                margin-left: 10px;
+                font-size: 14px;
+            }
         </style>`
     );
 
@@ -39,13 +66,13 @@
             ico: "fa-eye-slash",
             title: "黑名单管理",
             callback: function () {
-                // console.log("黑名单");
+                // console.log("黑名单");https://github.com/qq943260285/tampermonkey-recruitment-tool/issues
                 let div = $(`
                     <div class="xyzs-enterprise-list xyzs-scrollbar" ></div>
                 `);
                 $.each(blacklistList, function (index, item) {
                     div.prepend($(`<div class="xyzs-enterprise-item">` + item + `</div>`)
-                        .append($(`<i class="fa fa-times xyzs-enterprise-item-ico" title="删除" item-name="` + item + `"></i>`)
+                        .append($(`<i class="fa fa-times xyzs-enterprise-item-ico" title="移除/恢复" item-name="` + item + `"></i>`)
                             .click(function () {
                                 dleDlacklistName($(this).attr('item-name'));
                                 $(this).closest('.xyzs-enterprise-item').remove();
@@ -53,7 +80,24 @@
                         )
                     )
                 });
-                $.WindowXYZS().show("黑名单管理", div)
+                $.WindowXYZS().show("黑名单管理  <span onclick='window.open(\"https://github.com/qq943260285/tampermonkey-recruitment-tool/issues\",\"_blank\");' title='点击反馈' style='cursor:pointer;font-size: 9px;color: #ff5c4c;'>[欢迎提建议和反馈问题（点击）]</span>", div)
+            }
+        },
+        {
+            ico: "fa-magic",
+            title: "支持网站",
+            callback: function () {
+                let div = $(`
+                    <div class="xyzs-stand-list xyzs-scrollbar" ></div>
+                `);
+                $.each(WebJqList, function (index, item) {
+                    div.append($(`<div class="xyzs-stand-item" title="点击访问：` + item.WebName + `"><img style="width: 16px;height: 16px;" src="//` + item.WebUrl + `/favicon.ico"><span>` + item.WebName + `</span></div>`)
+                        .click(function () {
+                            window.open("//" + item.WebUrl, "_blank");
+                        }).append($(`<i class="fa fa-arrow-right xyzs-enterprise-item-ico"></i>`))
+                    )
+                });
+                $.WindowXYZS().show("支持网站  <span onclick='window.open(\"https://github.com/qq943260285/tampermonkey-recruitment-tool/issues\",\"_blank\");' title='点击反馈' style='cursor:pointer;font-size: 9px;color: #ff5c4c;'>[欢迎提建议和反馈问题（点击）]</span>", div)
             }
         },
         // {
@@ -87,89 +131,99 @@
     let blacklistKey = 'blacklist'
         , blacklistList = GM_getValue(blacklistKey) ? JSON.parse(GM_getValue(blacklistKey)) : []
         , blacklistFunction = {
-        //网站
-        WebUrl: null,
-        //是否需要刷新
-        IsRefresh: null,
-        //加入黑名单按钮样式
-        DleButtonStyle: null,
-        //网站定位列表
-        HtmlToList: () => {
+            //网站名
+            WebName: null,
+            //网站
+            WebUrl: null,
+            //是否需要刷新
+            IsRefresh: null,
+            //加入黑名单按钮样式
+            DleButtonStyle: null,
+            //网站定位列表
+            HtmlToList: () => {
+            },
+            //列表项定位名称对象
+            ItemToNameJq: () => {
+            },
+            //名称对象定位名称字符串
+            NameJqToNameText: () => {
+            },
+            //x按钮定位Item
+            DleButtonToItem: () => {
+            }
         },
-        //列表项定位名称对象
-        ItemToNameJq: () => {
-        },
-        //名称对象定位名称字符串
-        NameJqToNameText: () => {
-        },
-        //x按钮定位Item
-        DleButtonToItem: () => {
-        }
-    }, WebJqList = [
-        {
-            WebUrl: "search.51job.com",
-            IsRefresh: false,
-            //margin: 0 10px;display: inline;position: absolute;
-            DleButtonStyle: 'position: absolute;left: 295px;display: inline-flex;',
-            HtmlToList: () => $('.el .t2 a[title]').closest('.el'),
-            ItemToNameJq: (item) => $(item).find('.t2 a[title]'),
-            NameJqToNameText: (item) => $(item).attr('title'),
-            DleButtonToItem: (item) => $(item).closest('.el')
-        },
-        {
-            WebUrl: "sou.zhaopin.com",
-            IsRefresh: true,
-            DleButtonStyle: 'margin: 0 10px;display: inline-table;',
-            HtmlToList: () => $('#listContent .clearfix .commpanyName a[title]').closest('.clearfix'),
-            ItemToNameJq: (item) => $(item).find('.commpanyName a[title]'),
-            NameJqToNameText: (item) => $(item).attr('title'),
-            DleButtonToItem: (item) => $(item).closest('.clearfix')
-        },
-        {
-            WebUrl: "www.zhipin.com",
-            IsRefresh: false,
-            DleButtonStyle: 'float: left;',
-            HtmlToList: () => $('.company-text h3 a[ka]').closest('li'),
-            ItemToNameJq: (item) => $(item).find('.company-text h3 a[ka]'),
-            NameJqToNameText: (item) => $(item).text(),
-            DleButtonToItem: (item) => $(item).closest('li')
-        },
-        {
-            WebUrl: "www.lagou.com",
-            IsRefresh: true,
-            DleButtonStyle: 'float: left;',
-            HtmlToList: () => $('li .company_name a[data-lg-tj-cid]').closest('li'),
-            ItemToNameJq: (item) => $(item).find('.company_name a[data-lg-tj-cid]'),
-            NameJqToNameText: (item) => $(item).text(),
-            DleButtonToItem: (item) => $(item).closest('li')
-        },
-        {
-            WebUrl: "www.liepin.com",
-            IsRefresh: false,
-            DleButtonStyle: 'display: inline-flex;position: absolute;right: 280px;',
-            HtmlToList: () => $('li .company-name a[title]').closest('li'),
-            ItemToNameJq: (item) => $(item).find('.company-name a[title]'),
-            NameJqToNameText: (item) => $(item).text(),
-            DleButtonToItem: (item) => $(item).closest('li')
-        },
-        {
-            WebUrl: ".58.com",
-            IsRefresh: false,
-            DleButtonStyle: 'background: transparent;top: 12px;position: absolute;left: -50px;',
-            HtmlToList: () => $('#list_con li .comp_name a[title]').closest('li'),
-            ItemToNameJq: (item) => $(item).find('.comp_name a[title]'),
-            NameJqToNameText: (item) => $(item).text(),
-            DleButtonToItem: (item) => $(item).closest('li')
-        },
-        {
-            WebUrl: "zhaopin.baidu.com",
-            IsRefresh: true,
-            DleButtonStyle: 'background: transparent;top: 12px;position: absolute;left: -50px;',
-            HtmlToList: () => $('.listitem .single .companyname').closest('.single'),
-            ItemToNameJq: (item) => $(item).find('.companyname'),
-            NameJqToNameText: (item) => $(item).text(),
-            DleButtonToItem: (item) => $(item).closest('.single')
-        }];
+        WebJqList = [
+            {
+                WebName: "前程无忧",
+                WebUrl: "search.51job.com",
+                IsRefresh: false,
+                //margin: 0 10px;display: inline;position: absolute;
+                DleButtonStyle: 'position: absolute;left: 295px;display: inline-flex;',
+                HtmlToList: () => $('.el .t2 a[title]').closest('.el'),
+                ItemToNameJq: (item) => $(item).find('.t2 a[title]'),
+                NameJqToNameText: (item) => $(item).attr('title'),
+                DleButtonToItem: (item) => $(item).closest('.el')
+            },
+            {
+                WebName: "智联招聘",
+                WebUrl: "sou.zhaopin.com",
+                IsRefresh: true,
+                DleButtonStyle: 'margin: 0 10px;display: inline-table;',
+                HtmlToList: () => $('#listContent .clearfix .commpanyName a[title]').closest('.clearfix'),
+                ItemToNameJq: (item) => $(item).find('.commpanyName a[title]'),
+                NameJqToNameText: (item) => $(item).attr('title'),
+                DleButtonToItem: (item) => $(item).closest('.clearfix')
+            },
+            {
+                WebName: "BOSS直聘",
+                WebUrl: "www.zhipin.com",
+                IsRefresh: false,
+                DleButtonStyle: 'float: left;',
+                HtmlToList: () => $('.company-text h3 a[ka]').closest('li'),
+                ItemToNameJq: (item) => $(item).find('.company-text h3 a[ka]'),
+                NameJqToNameText: (item) => $(item).text(),
+                DleButtonToItem: (item) => $(item).closest('li')
+            },
+            {
+                WebName: "拉勾网",
+                WebUrl: "www.lagou.com",
+                IsRefresh: true,
+                DleButtonStyle: 'float: left;',
+                HtmlToList: () => $('li .company_name a[data-lg-tj-cid]').closest('li'),
+                ItemToNameJq: (item) => $(item).find('.company_name a[data-lg-tj-cid]'),
+                NameJqToNameText: (item) => $(item).text(),
+                DleButtonToItem: (item) => $(item).closest('li')
+            },
+            {
+                WebName: "猎聘网",
+                WebUrl: "www.liepin.com",
+                IsRefresh: false,
+                DleButtonStyle: 'display: inline-flex;position: absolute;right: 280px;',
+                HtmlToList: () => $('li .company-name a[title]').closest('li'),
+                ItemToNameJq: (item) => $(item).find('.company-name a[title]'),
+                NameJqToNameText: (item) => $(item).text(),
+                DleButtonToItem: (item) => $(item).closest('li')
+            },
+            {
+                WebName: "58同城",
+                WebUrl: "58.com",
+                IsRefresh: false,
+                DleButtonStyle: 'background: transparent;top: 12px;position: absolute;left: -50px;',
+                HtmlToList: () => $('#list_con li .comp_name a[title]').closest('li'),
+                ItemToNameJq: (item) => $(item).find('.comp_name a[title]'),
+                NameJqToNameText: (item) => $(item).text(),
+                DleButtonToItem: (item) => $(item).closest('li')
+            },
+            {
+                WebName: "百度招聘",
+                WebUrl: "zhaopin.baidu.com",
+                IsRefresh: true,
+                DleButtonStyle: 'background: transparent;top: 12px;position: absolute;left: -50px;',
+                HtmlToList: () => $('.listitem .single .companyname').closest('.single'),
+                ItemToNameJq: (item) => $(item).find('.companyname'),
+                NameJqToNameText: (item) => $(item).text(),
+                DleButtonToItem: (item) => $(item).closest('.single')
+            }];
 
     //====== 初始化 =======
     function blacklistInit() {

@@ -1,6 +1,6 @@
 {
   "name": "tampermonkey-recruitment-tool",
-  "version": "1.0.0",
+  "version": "2.0",
   "description": "油猴脚本编写",
   "main": "src/tampermonkey-recruitment-tool.js",
   "dependencies": {},
