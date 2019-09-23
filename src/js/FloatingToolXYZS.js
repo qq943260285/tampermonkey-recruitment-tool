@@ -44,14 +44,14 @@
                 position: absolute;
                 left: ` + toolSize + `px;
                 display: none;
-                transition: display 3s;
+                /*transition: display 3s;*/
                 padding: 0 10px;
-                -webkit-animation-duration: 1s;
-                animation-duration: 1s;
-                -webkit-animation-fill-mode: both;
-                animation-fill-mode: both;
-                -webkit-animation-name: rubberBand;
-                animation-name: rubberBand;
+                /*-webkit-animation-duration: 1s;*/
+                /*animation-duration: 1s;*/
+                /*-webkit-animation-fill-mode: both;*/
+                /*animation-fill-mode: both;*/
+                /*-webkit-animation-name: rubberBand;*/
+                /*animation-name: rubberBand;*/
             }
             .xyzs-tool .fa-tool{
                 font-size: 27px;
@@ -73,12 +73,12 @@
                 -moz-box-shadow:1px 1px 15px rgb(35,35,35);
                 -webkit-box-shadow:1px 1px 15px rgb(35,35,35);
                 box-shadow:1px 1px 15px rgb(35,35,35);
-                -webkit-animation-duration: .8s;
-                animation-duration: .8s;
-                -webkit-animation-fill-mode: both;
-                animation-fill-mode: both;
-                -webkit-animation-name: rubberBand;
-                animation-name: rubberBand;
+                /*-webkit-animation-duration: .8s;*/
+                /*animation-duration: .8s;*/
+                /*-webkit-animation-fill-mode: both;*/
+                /*animation-fill-mode: both;*/
+                /*-webkit-animation-name: rubberBand;*/
+                /*animation-name: rubberBand;*/
             }
             .xyzs-menu-item .fa-item{
                 font-size: 20px;
@@ -89,69 +89,69 @@
                 cursor: pointer;
                 color: #fff;
             }
-            .xyzs-menu-item .fa-item:hover{
+            /*.xyzs-menu-item .fa-item:hover{*/
 
-            }
-            @-webkit-keyframes rubberBand {
-                from {
-                    -webkit-transform: scale3d(1, 1, 1);
-                    transform: scale3d(1, 1, 1);
-                }
-                30% {
-                    -webkit-transform: scale3d(1.25, 0.75, 1);
-                    transform: scale3d(1.25, 0.75, 1);
-                }
-                40% {
-                    -webkit-transform: scale3d(0.75, 1.25, 1);
-                    transform: scale3d(0.75, 1.25, 1);
-                }
-                50% {
-                    -webkit-transform: scale3d(1.15, 0.85, 1);
-                    transform: scale3d(1.15, 0.85, 1);
-                }
-                65% {
-                    -webkit-transform: scale3d(0.95, 1.05, 1);
-                    transform: scale3d(0.95, 1.05, 1);
-                }
-                75% {
-                    -webkit-transform: scale3d(1.05, 0.95, 1);
-                    transform: scale3d(1.05, 0.95, 1);
-                }
-                to {
-                    -webkit-transform: scale3d(1, 1, 1);
-                    transform: scale3d(1, 1, 1);
-                }
-            }
-            @keyframes rubberBand {
-                from {
-                    -webkit-transform: scale3d(1, 1, 1);
-                    transform: scale3d(1, 1, 1);
-                }
-                30% {
-                    -webkit-transform: scale3d(1.25, 0.75, 1);
-                    transform: scale3d(1.25, 0.75, 1);
-                }
-                40% {
-                    -webkit-transform: scale3d(0.75, 1.25, 1);
-                    transform: scale3d(0.75, 1.25, 1);
-                }
-                50% {
-                    -webkit-transform: scale3d(1.15, 0.85, 1);
-                    transform: scale3d(1.15, 0.85, 1);
-                }
-                65% {
-                    -webkit-transform: scale3d(0.95, 1.05, 1);
-                    transform: scale3d(0.95, 1.05, 1);
-                }
-                75% {
-                    -webkit-transform: scale3d(1.05, 0.95, 1);
-                    transform: scale3d(1.05, 0.95, 1);
-                }
-                to {
-                    -webkit-transform: scale3d(1, 1, 1);
-                    transform: scale3d(1, 1, 1);
-                }
-            }
+            /*}*/
+            /*@-webkit-keyframes rubberBand {*/
+                /*from {*/
+                    /*-webkit-transform: scale3d(1, 1, 1);*/
+                    /*transform: scale3d(1, 1, 1);*/
+                /*}*/
+                /*30% {*/
+                    /*-webkit-transform: scale3d(1.25, 0.75, 1);*/
+                    /*transform: scale3d(1.25, 0.75, 1);*/
+                /*}*/
+                /*40% {*/
+                    /*-webkit-transform: scale3d(0.75, 1.25, 1);*/
+                    /*transform: scale3d(0.75, 1.25, 1);*/
+                /*}*/
+                /*50% {*/
+                    /*-webkit-transform: scale3d(1.15, 0.85, 1);*/
+                    /*transform: scale3d(1.15, 0.85, 1);*/
+                /*}*/
+                /*65% {*/
+                    /*-webkit-transform: scale3d(0.95, 1.05, 1);*/
+                    /*transform: scale3d(0.95, 1.05, 1);*/
+                /*}*/
+                /*75% {*/
+                    /*-webkit-transform: scale3d(1.05, 0.95, 1);*/
+                    /*transform: scale3d(1.05, 0.95, 1);*/
+                /*}*/
+                /*to {*/
+                    /*-webkit-transform: scale3d(1, 1, 1);*/
+                    /*transform: scale3d(1, 1, 1);*/
+                /*}*/
+            /*}*/
+            /*@keyframes rubberBand {*/
+                /*from {*/
+                    /*-webkit-transform: scale3d(1, 1, 1);*/
+                    /*transform: scale3d(1, 1, 1);*/
+                /*}*/
+                /*30% {*/
+                    /*-webkit-transform: scale3d(1.25, 0.75, 1);*/
+                    /*transform: scale3d(1.25, 0.75, 1);*/
+                /*}*/
+                /*40% {*/
+                    /*-webkit-transform: scale3d(0.75, 1.25, 1);*/
+                    /*transform: scale3d(0.75, 1.25, 1);*/
+                /*}*/
+                /*50% {*/
+                    /*-webkit-transform: scale3d(1.15, 0.85, 1);*/
+                    /*transform: scale3d(1.15, 0.85, 1);*/
+                /*}*/
+                /*65% {*/
+                    /*-webkit-transform: scale3d(0.95, 1.05, 1);*/
+                    /*transform: scale3d(0.95, 1.05, 1);*/
+                /*}*/
+                /*75% {*/
+                    /*-webkit-transform: scale3d(1.05, 0.95, 1);*/
+                    /*transform: scale3d(1.05, 0.95, 1);*/
+                /*}*/
+                /*to {*/
+                    /*-webkit-transform: scale3d(1, 1, 1);*/
+                    /*transform: scale3d(1, 1, 1);*/
+                /*}*/
+            /*}*/
 
 
 

@@ -267,10 +267,10 @@
                 ).append(
                     //企查查
                     //https://www.qichacha.com/material/theme/chacha/cms/v2/images/favicon.png
-                    //https://www.qichacha.com/search?key=瑞多思
+                    //https://www.qichacha.com/search?key=xx有限公司
                     //天眼查
                     //https://cdn.tianyancha.com/wap/images/18blue/weixinlogo.png
-                    //https://www.tianyancha.com/search?key=瑞多思
+                    //https://www.tianyancha.com/search?key=xx有限公司
                     $('<div title="企业查询" class="xyzs-search-div"><i class="fa fa-search xyzs-search-ico"></i></div>')
                         .click(function () {
                             window.open('https://www.tianyancha.com/search?key=' +
