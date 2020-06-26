@@ -58,6 +58,50 @@
                 margin-left: 10px;
                 font-size: 14px;
             }
+            .xyzs-search-div-lists{
+                float: right;
+                padding: 0 5px;
+                background-color: #fff;
+                border: 1px solid;
+                display: none;
+                position: absolute;
+                border-radius: 6px;
+                margin-left: 23px;
+                margin-top: -34px;
+                z-index: 9999;
+                box-shadow: 0 0 10px rgba(82, 82, 82, .3);
+            }
+             .xyzs-search-div-lists::before{  
+                content: '';
+                display: block;
+                position: absolute;
+                top: 8px;
+                left: -8px;
+                border-top: 6px solid transparent;
+                border-right: 8px solid #ff0909;
+                border-bottom: 6px solid transparent;
+            }
+             .xyzs-search-div-lists::after{  
+                content: '';
+                display: block;
+                position: absolute;
+                top: 8px;
+                left: -7px;
+                border-top: 6px solid transparent;
+                border-right: 8px solid #fff;
+                border-bottom: 6px solid transparent;
+            }
+            .xyzs-search-div-list{
+                margin: 5px;
+                line-height: 16px;
+                height: auto;
+                width: 16px;
+            }
+            .xyzs-search-div-list-img{
+                height: 100%;
+                width: 100%;
+                box-shadow: 0 0 5px rgba(82, 82, 82, .3);
+            }
         </style>`
     );
 
@@ -223,7 +267,35 @@
                 ItemToNameJq: (item) => $(item).find('.companyname'),
                 NameJqToNameText: (item) => $(item).text(),
                 DleButtonToItem: (item) => $(item).closest('.single')
-            }];
+            }],
+        searchList = [
+            {
+                Title: '天眼查',
+                Host: "https://tianyancha.com",
+                SearchUrl: '/search?key='
+            },
+            {
+                Title: '看准',
+                Host: "https://kanzhun.com",
+                SearchUrl: '/search/?type=company&q='
+            },
+            {
+                Title: '企查查',
+                Host: "https://qcc.com",
+                SearchUrl: '/search?key='
+            },
+            {
+                Title: '百度信誉',
+                Host: "https://xin.baidu.com",
+                SearchUrl: '/s?q='
+            },
+            {
+                Title: '百度搜索',
+                Host: "https://baidu.com",
+                SearchUrl: '/s?wd='
+            },
+        ]
+    ;
 
     //====== 初始化 =======
     function blacklistInit() {
@@ -259,8 +331,7 @@
             if (blacklistList.indexOf(name) > -1) {
                 isShow = false;
                 // console.log('indexOf过滤,' + name);
-            }
-            else {
+            } else {
                 for (let i = 0; i < blacklistList.length; i++) {
                     if (new RegExp(blacklistList[i], 'i').test(name)) {
                         isShow = false;
@@ -285,8 +356,7 @@
             // console.log("加入黑名单," + name);
             blacklistList.push(name);
             GM_setValue(blacklistKey, JSON.stringify(blacklistList));
-        }
-        else {
+        } else {
             // console.log("已存在黑名单," + name);
         }
         blacklistFilter();
@@ -318,26 +388,58 @@
                             );
                             return false;
                         })
-                ).append(
-                    //企查查
-                    //https://www.qichacha.com/material/theme/chacha/cms/v2/images/favicon.png
-                    //https://www.qichacha.com/search?key=xx有限公司
-                    //天眼查
-                    //https://cdn.tianyancha.com/wap/images/18blue/weixinlogo.png
-                    //https://www.tianyancha.com/search?key=xx有限公司
-                    $('<div title="企业查询" class="xyzs-search-div"><i class="fa fa-search xyzs-search-ico"></i></div>')
-                        .click(function () {
-                            window.open('https://www.tianyancha.com/search?key=' +
-                                encodeURI(
-                                    blacklistFunction.NameJqToNameText(
-                                        blacklistFunction.ItemToNameJq(
-                                            blacklistFunction.DleButtonToItem(this)
+                    ).append(function () {
+                        var hoverTimer;
+                        return $('<div title="企业查询" class="xyzs-search-div"><i class="fa fa-search xyzs-search-ico"></i></div>')
+                            .append(
+                                function () {
+                                    let lists = $('<div class="xyzs-search-div-lists"></div>');
+                                    $.each(searchList, function (i, o) {
+                                        lists.append(
+                                            $('<div title="' + o.Title + '" class="xyzs-search-div-list"><img class="xyzs-search-div-list-img" src="' + o.Host + '/favicon.ico"></div>')
+                                                .click(function () {
+                                                    window.open(o.Host + o.SearchUrl +
+                                                        encodeURI(
+                                                            blacklistFunction.NameJqToNameText(
+                                                                blacklistFunction.ItemToNameJq(
+                                                                    blacklistFunction.DleButtonToItem(this)
+                                                                )
+                                                            )));
+                                                    return false;
+                                                })
                                         )
-                                    )));
+                                    });
+                                    return lists;
+                                }()
+                            )
+                            .hover(function () {
+                                    let _this = this;
+                                    hoverTimer = setTimeout(function () {
+                                        console.log("setTimeout-mouseover", _this, this);
+                                        $(_this).find(".xyzs-search-div-lists")
+                                            .css('display', 'flex');
+                                    }, 500);
 
-                            return false;
-                        })
-                ))
+                                }
+                                , function () {
+                                    clearTimeout(hoverTimer);
+                                    $(this).find(".xyzs-search-div-lists").hide();
+                                }
+                            )
+                            .click(function () {
+                                window.open(searchList[0].Host + searchList[0].SearchUrl +
+                                    encodeURI(
+                                        blacklistFunction.NameJqToNameText(
+                                            blacklistFunction.ItemToNameJq(
+                                                blacklistFunction.DleButtonToItem(this)
+                                            )
+                                        )));
+
+                                return false;
+                            })
+                    }()
+                    )
+                )
             }
         });
     }

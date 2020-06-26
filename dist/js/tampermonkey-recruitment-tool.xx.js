@@ -1,17 +1,17 @@
 // ==UserScript==
 // @name         高级求职助手/招聘网站助手，支持前程无忧、智联招聘、BOSS直聘、拉钩网、猎聘网、百度百聘、58同城
 // @namespace    https://github.com/qq943260285
-// @version      2.0
-// @description  1.快捷添加企业黑名单；2.支持正则表达式黑名单；3.支持前程无忧、智联招聘、BOSS直聘、拉钩网、猎聘网、百度百聘、58同城;4.各大网站黑名单数据连通。
+// @version      3.20.0626
+// @description  1.快捷添加企业黑名单；2.快捷公司/企业信息查询，支持天眼查、看准、企查查、百度信誉、百度搜索3.支持全网热门招聘网站，前程无忧、智联招聘、BOSS直聘、拉钩网、猎聘网、百度百聘、58同城;4.各大网站黑名单数据连通。
 // @author       小宇专属(943260285@qq.com)
 // @license      GPL-3.0-only
 // @icon         https://qq943260285.github.io/favicon.png
 // @create       2019-03-25
-// @lastmodified 2019-09-24
+// @lastmodified 2020-06-26
 // @home-url     https://greasyfork.org/zh-TW/scripts/380848
 // @supportURL   https://github.com/qq943260285/tampermonkey-recruitment-tool.git
 // @feedback-url https://github.com/qq943260285/tampermonkey-recruitment-tool.git
-// @note         2019.09.24-V2.0 添加百度百聘、58同城支持，添加导航，修复部分BUG，调整部分样式（感谢反馈的朋友，欢迎大家反馈提意见）
+// @note         2020-06-26 添加公司/企业信息查询，支持天眼查、看准、企查查、百度信誉、百度搜索（感谢greasyfork用户：miracle god，意见反馈）
 // @match        *://search.51job.com/*
 // @match        *://sou.zhaopin.com/*
 // @match        *://www.zhipin.com/*
@@ -123,10 +123,28 @@
                         blacklistFilter();
                     }(blacklistFunction.NameJqToNameText(blacklistFunction.ItemToNameJq(blacklistFunction.DleButtonToItem(this)))), 
                     !1;
-                })).append($('<div title="企业查询" class="xyzs-search-div"><i class="fa fa-search xyzs-search-ico"></i></div>').click(function() {
-                    return window.open("https://www.tianyancha.com/search?key=" + encodeURI(blacklistFunction.NameJqToNameText(blacklistFunction.ItemToNameJq(blacklistFunction.DleButtonToItem(this))))), 
-                    !1;
-                })));
+                })).append(function() {
+                    var hoverTimer;
+                    return $('<div title="企业查询" class="xyzs-search-div"><i class="fa fa-search xyzs-search-ico"></i></div>').append(function() {
+                        var lists = $('<div class="xyzs-search-div-lists"></div>');
+                        return $.each(searchList, function(i, o) {
+                            lists.append($('<div title="' + o.Title + '" class="xyzs-search-div-list"><img class="xyzs-search-div-list-img" src="' + o.Host + '/favicon.ico"></div>').click(function() {
+                                return window.open(o.Host + o.SearchUrl + encodeURI(blacklistFunction.NameJqToNameText(blacklistFunction.ItemToNameJq(blacklistFunction.DleButtonToItem(this))))), 
+                                !1;
+                            }));
+                        }), lists;
+                    }()).hover(function() {
+                        var _this = this;
+                        hoverTimer = setTimeout(function() {
+                            $(_this).find(".xyzs-search-div-lists").css("display", "flex");
+                        }, 500);
+                    }, function() {
+                        clearTimeout(hoverTimer), $(this).find(".xyzs-search-div-lists").hide();
+                    }).click(function() {
+                        return window.open(searchList[0].Host + searchList[0].SearchUrl + encodeURI(blacklistFunction.NameJqToNameText(blacklistFunction.ItemToNameJq(blacklistFunction.DleButtonToItem(this))))), 
+                        !1;
+                    });
+                }()));
             });
         }();
     }
@@ -142,7 +160,7 @@
     }
     var body = $("body");
     body.before('<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />'), 
-    body.before("<style>\n            \n            /*=== 功能 ===*/\n            /*.xyzs-features-div{*/\n                /*background: #fff;*/\n            /*}*/\n            .xyzs-del-div{\n                color: #ff5c4c;\n                font-size: 20px;\n                cursor: pointer;\n                float: left;\n                margin: 0 3px;\n            }\n            .xyzs-search-div{\n                color: #ff5c4c;\n                font-size: 20px;\n                cursor: pointer;\n                float: left;\n                margin: 0 3px;\n            }\n            \n            .xyzs-search-ico{\n                color: #ff5c4c!important;\n            }\n            .xyzs-del-ico{\n                color: #ff5c4c!important;\n            }\n            .xyzs-enterprise-item{\n                border-radius: 10px;\n                color: #666;\n            }\n            .xyzs-enterprise-item:hover{\n                background-color: rgba(255,96,80,0.15);\n            }\n            .xyzs-enterprise-item-ico{\n                cursor:pointer;\n            }\n            \n            .xyzs-stand-item{\n                cursor: pointer;\n                margin: 0 10px;\n                padding: 5px 15px;\n            }\n            .xyzs-stand-item:hover{\n                background-color: rgba(255,96,80,0.15);\n            }\n            .xyzs-stand-item img{\n                color: #333;\n            }\n            .xyzs-stand-item span{\n                color: #666;\n                margin-left: 10px;\n                font-size: 14px;\n            }\n        </style>");
+    body.before("<style>\n            \n            /*=== 功能 ===*/\n            /*.xyzs-features-div{*/\n                /*background: #fff;*/\n            /*}*/\n            .xyzs-del-div{\n                color: #ff5c4c;\n                font-size: 20px;\n                cursor: pointer;\n                float: left;\n                margin: 0 3px;\n            }\n            .xyzs-search-div{\n                color: #ff5c4c;\n                font-size: 20px;\n                cursor: pointer;\n                float: left;\n                margin: 0 3px;\n            }\n            \n            .xyzs-search-ico{\n                color: #ff5c4c!important;\n            }\n            .xyzs-del-ico{\n                color: #ff5c4c!important;\n            }\n            .xyzs-enterprise-item{\n                border-radius: 10px;\n                color: #666;\n            }\n            .xyzs-enterprise-item:hover{\n                background-color: rgba(255,96,80,0.15);\n            }\n            .xyzs-enterprise-item-ico{\n                cursor:pointer;\n            }\n            \n            .xyzs-stand-item{\n                cursor: pointer;\n                margin: 0 10px;\n                padding: 5px 15px;\n            }\n            .xyzs-stand-item:hover{\n                background-color: rgba(255,96,80,0.15);\n            }\n            .xyzs-stand-item img{\n                color: #333;\n            }\n            .xyzs-stand-item span{\n                color: #666;\n                margin-left: 10px;\n                font-size: 14px;\n            }\n            .xyzs-search-div-lists{\n                float: right;\n                padding: 0 5px;\n                background-color: #fff;\n                border: 1px solid;\n                display: none;\n                position: absolute;\n                border-radius: 6px;\n                margin-left: 23px;\n                margin-top: -34px;\n                z-index: 9999;\n                box-shadow: 0 0 10px rgba(82, 82, 82, .3);\n            }\n             .xyzs-search-div-lists::before{  \n                content: '';\n                display: block;\n                position: absolute;\n                top: 8px;\n                left: -8px;\n                border-top: 6px solid transparent;\n                border-right: 8px solid #ff0909;\n                border-bottom: 6px solid transparent;\n            }\n             .xyzs-search-div-lists::after{  \n                content: '';\n                display: block;\n                position: absolute;\n                top: 8px;\n                left: -7px;\n                border-top: 6px solid transparent;\n                border-right: 8px solid #fff;\n                border-bottom: 6px solid transparent;\n            }\n            .xyzs-search-div-list{\n                margin: 5px;\n                line-height: 16px;\n                height: auto;\n                width: 16px;\n            }\n            .xyzs-search-div-list-img{\n                height: 100%;\n                width: 100%;\n                box-shadow: 0 0 5px rgba(82, 82, 82, .3);\n            }\n        </style>");
     var menuItems = [ {
         ico: "fa-eye-slash",
         title: "黑名单管理",
@@ -311,6 +329,26 @@
         DleButtonToItem: function(item) {
             return $(item).closest(".single");
         }
+    } ], searchList = [ {
+        Title: "天眼查",
+        Host: "https://tianyancha.com",
+        SearchUrl: "/search?key="
+    }, {
+        Title: "看准",
+        Host: "https://kanzhun.com",
+        SearchUrl: "/search/?type=company&q="
+    }, {
+        Title: "企查查",
+        Host: "https://qcc.com",
+        SearchUrl: "/search?key="
+    }, {
+        Title: "百度信誉",
+        Host: "https://xin.baidu.com",
+        SearchUrl: "/s?q="
+    }, {
+        Title: "百度搜索",
+        Host: "https://baidu.com",
+        SearchUrl: "/s?wd="
     } ];
     (function() {
         for (var i = 0; i < WebJqList.length; i++) if (-1 != window.location.host.indexOf(WebJqList[i].WebUrl)) {
