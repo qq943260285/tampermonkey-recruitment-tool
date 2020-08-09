@@ -200,13 +200,13 @@
             {
                 WebName: "前程无忧",
                 WebUrl: "search.51job.com",
-                IsRefresh: false,
+                IsRefresh: true,
                 //margin: 0 10px;display: inline;position: absolute;
-                DleButtonStyle: 'position: absolute;left: 295px;display: inline-flex;',
-                HtmlToList: () => $('.el .t2 a[title]').closest('.el'),
-                ItemToNameJq: (item) => $(item).find('.t2 a[title]'),
-                NameJqToNameText: (item) => $(item).attr('title'),
-                DleButtonToItem: (item) => $(item).closest('.el')
+                DleButtonStyle: 'position: absolute;left: -45px;top: 0px; float: left;',
+                HtmlToList: () => $('.j_joblist>.e'),
+                ItemToNameJq: (item) => $(item).find(".er a[title]"),
+                NameJqToNameText: (item) => $(item).attr("title"),
+                DleButtonToItem: (item) => $(item).closest(".e")
             },
             {
                 WebName: "智联招聘",
