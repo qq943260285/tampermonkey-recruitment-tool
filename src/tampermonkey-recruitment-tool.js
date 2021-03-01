@@ -213,10 +213,10 @@
                 WebUrl: "sou.zhaopin.com",
                 IsRefresh: true,
                 DleButtonStyle: 'margin: 0 10px;display: inline-table;',
-                HtmlToList: () => $('#listContent .clearfix .commpanyName a[title]').closest('.clearfix'),
-                ItemToNameJq: (item) => $(item).find('.commpanyName a[title]'),
+                HtmlToList: () => $('.positionlist>.joblist-box__item'),
+                ItemToNameJq: (item) => $(item).find('.iteminfo__line1__compname__name'),
                 NameJqToNameText: (item) => $(item).attr('title'),
-                DleButtonToItem: (item) => $(item).closest('.clearfix')
+                DleButtonToItem: (item) => $(item).closest('.joblist-box__item')
             },
             {
                 WebName: "BOSS直聘",

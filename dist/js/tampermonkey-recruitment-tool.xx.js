@@ -1,17 +1,17 @@
 // ==UserScript==
 // @name         高级求职助手/招聘网站助手，支持前程无忧、智联招聘、BOSS直聘、拉钩网、猎聘网、百度百聘、58同城
 // @namespace    https://github.com/qq943260285
-// @version      3.20.0805
+// @version      3.21.0301
 // @description  1.快捷添加企业黑名单；2.快捷公司/企业信息查询，支持天眼查、看准、企查查、百度信誉、百度搜索3.支持全网热门招聘网站，前程无忧、智联招聘、BOSS直聘、拉钩网、猎聘网、百度百聘、58同城;4.各大网站黑名单数据连通。
 // @author       小宇专属(943260285@qq.com)
 // @license      GPL-3.0-only
-// @icon         https://qq943260285.github.io/favicon.png
+// @icon         https://raw.githubusercontent.com/qq943260285/tampermonkey-recruitment-tool/master/assets/logo_ico.png
 // @create       2019-03-25
-// @lastmodified 2020-08-05
+// @lastmodified 2021-03-01
 // @home-url     https://greasyfork.org/zh-TW/scripts/380848
 // @supportURL   https://github.com/qq943260285/tampermonkey-recruitment-tool.git
 // @feedback-url https://github.com/qq943260285/tampermonkey-recruitment-tool.git
-// @note         2020-08-05 前程无忧改版调整（感谢githud用户：xxhhlk，Greasy用户：terryd，反馈）
+// @note         2021-03-01 1.智联招聘改版调整（感谢各位使用者反馈，谢谢）2.更新ico图标
 // @match        *://search.51job.com/*
 // @match        *://sou.zhaopin.com/*
 // @match        *://www.zhipin.com/*
@@ -233,16 +233,16 @@
         IsRefresh: !0,
         DleButtonStyle: "margin: 0 10px;display: inline-table;",
         HtmlToList: function() {
-            return $("#listContent .clearfix .commpanyName a[title]").closest(".clearfix");
+            return $(".positionlist>.joblist-box__item");
         },
         ItemToNameJq: function(item) {
-            return $(item).find(".commpanyName a[title]");
+            return $(item).find(".iteminfo__line1__compname__name");
         },
         NameJqToNameText: function(item) {
             return $(item).attr("title");
         },
         DleButtonToItem: function(item) {
-            return $(item).closest(".clearfix");
+            return $(item).closest(".joblist-box__item");
         }
     }, {
         WebName: "BOSS直聘",
