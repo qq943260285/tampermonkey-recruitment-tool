@@ -72,7 +72,8 @@
 
 
     //========== 功能相关 ==========
-    let blacklistKey = 'blacklist'
+    let regExpCharacter = ['\\', '$', '(', ')', '{', '}', '*', '+', '.', '[', ']', '?', '^', '|']
+        , blacklistKey = 'blacklist'
         , blacklistList = GM_getValue(blacklistKey) ? JSON.parse(GM_getValue(blacklistKey)) : []
         , blacklistFunction = {
             //网站名
@@ -143,8 +144,8 @@
                 WebUrl: "www.liepin.com",
                 IsRefresh: false,
                 DleButtonStyle: 'display: inline-flex;position: absolute;right: 280px;',
-                HtmlToList: () => $('li .company-name a[title]').closest('li'),
-                ItemToNameJq: (item) => $(item).find('.company-name a[title]'),
+                HtmlToList: () => $('li .job-list-item').closest('li'),
+                ItemToNameJq: (item) => $(item).find('.company-name'),
                 NameJqToNameText: (item) => $(item).text(),
                 DleButtonToItem: (item) => $(item).closest('li')
             },
@@ -183,6 +184,11 @@
                 Title: '企查查',
                 Host: "https://qcc.com",
                 SearchUrl: '/search?key='
+            },
+            {
+                Title: '爱企查',
+                Host: "https://aiqicha.baidu.com",
+                SearchUrl: '/s?q='
             },
             {
                 Title: '百度信誉',
@@ -233,7 +239,12 @@
                 // console.log('indexOf过滤,' + name);
             } else {
                 for (let i = 0; i < blacklistList.length; i++) {
-                    if (new RegExp(blacklistList[i], 'i').test(name)) {
+                    var re = blacklistList[i];
+                    for (var j = 0; j < regExpCharacter.length; j++) {
+                        re = re.replace(new RegExp('\\' + regExpCharacter[j], 'g'), "\\" + regExpCharacter[j]);
+                    }
+
+                    if (new RegExp(re, 'i').test(name)) {
                         isShow = false;
                         console.log(blacklistList[i] + '正则表达式过滤,' + name);
                         break;

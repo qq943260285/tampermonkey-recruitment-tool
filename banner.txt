@@ -11,7 +11,7 @@
 // @home-url     https://greasyfork.org/zh-TW/scripts/380848
 // @supportURL   <%= git %>
 // @feedback-url <%= git %>
-// @note         2021-03-01 1.智联招聘改版调整（感谢各位使用者反馈，谢谢）2.更新ico图标
+// @note         2021-12-10 1.修复猎聘网改版支持；2.添加爱企查企业信息查询；3.优化代码及匹配规则；
 // @match        *://search.51job.com/*
 // @match        *://sou.zhaopin.com/*
 // @match        *://www.zhipin.com/*

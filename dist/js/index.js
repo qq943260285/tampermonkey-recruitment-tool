@@ -2,16 +2,16 @@
 // @name         高级求职助手/招聘网站助手，支持前程无忧、智联招聘、BOSS直聘、拉钩网、猎聘网、百度百聘、58同城
 // @namespace    https://github.com/qq943260285
 // @version      3.21.1210
-// @description  1.快捷添加企业黑名单；2.快捷公司/企业信息查询，支持天眼查、看准、企查查、百度信誉、百度搜索3.支持全网热门招聘网站，前程无忧、智联招聘、BOSS直聘、拉钩网、猎聘网、百度百聘、58同城;4.各大网站黑名单数据连通。
+// @description  1.快捷添加企业黑名单；2.快捷公司/企业信息查询，支持天眼查、看准、企查查、爱企查、百度信誉、百度搜索3.支持全网热门招聘网站，前程无忧、智联招聘、BOSS直聘、拉钩网、猎聘网、百度百聘、58同城;4.各大网站黑名单数据连通。
 // @author       小宇专属
 // @license      GPL-3.0-only
 // @icon         https://raw.githubusercontent.com/qq943260285/tampermonkey-recruitment-tool/master/assets/logo_ico.png
 // @create       2019-03-25
-// @lastmodified 2021-12-09
+// @lastmodified 2021-12-10
 // @home-url     https://greasyfork.org/zh-TW/scripts/380848
 // @supportURL   https://github.com/qq943260285/tampermonkey-recruitment-tool.git
 // @feedback-url https://github.com/qq943260285/tampermonkey-recruitment-tool.git
-// @note         2021-03-01 1.智联招聘改版调整（感谢各位使用者反馈，谢谢）2.更新ico图标
+// @note         2021-12-10 1.修复猎聘网改版支持；2.添加爱企查企业信息查询；3.优化代码及匹配规则；
 // @match        *://search.51job.com/*
 // @match        *://sou.zhaopin.com/*
 // @match        *://www.zhipin.com/*
@@ -152,9 +152,12 @@
     function blacklistFilter() {
         blacklistFunction.HtmlToList().each(function(index, element) {
             var isShow = !0, name = blacklistFunction.NameJqToNameText(blacklistFunction.ItemToNameJq(element));
-            if (-1 < blacklistList.indexOf(name)) isShow = !1; else for (var i = 0; i < blacklistList.length; i++) if (new RegExp(blacklistList[i], "i").test(name)) {
-                isShow = !1;
-                break;
+            if (-1 < blacklistList.indexOf(name)) isShow = !1; else for (var i = 0; i < blacklistList.length; i++) {
+                for (var re = blacklistList[i], j = 0; j < regExpCharacter.length; j++) re = re.replace(new RegExp("\\" + regExpCharacter[j], "g"), "\\" + regExpCharacter[j]);
+                if (new RegExp(re, "i").test(name)) {
+                    isShow = !1;
+                    break;
+                }
             }
             if (isShow) $(element).show(); else $(element).hide();
         });
@@ -200,7 +203,7 @@
             window.open("https://github.com/qq943260285/tampermonkey-recruitment-tool.git");
         }
     } ]);
-    var blacklistKey = "blacklist", blacklistList = GM_getValue(blacklistKey) ? JSON.parse(GM_getValue(blacklistKey)) : [], blacklistFunction = {
+    var regExpCharacter = [ "\\", "$", "(", ")", "{", "}", "*", "+", ".", "[", "]", "?", "^", "|" ], blacklistKey = "blacklist", blacklistList = GM_getValue(blacklistKey) ? JSON.parse(GM_getValue(blacklistKey)) : [], blacklistFunction = {
         WebName: null,
         WebUrl: null,
         IsRefresh: null,
@@ -283,10 +286,10 @@
         IsRefresh: !1,
         DleButtonStyle: "display: inline-flex;position: absolute;right: 280px;",
         HtmlToList: function() {
-            return $("li .company-name a[title]").closest("li");
+            return $("li .job-list-item").closest("li");
         },
         ItemToNameJq: function(item) {
-            return $(item).find(".company-name a[title]");
+            return $(item).find(".company-name");
         },
         NameJqToNameText: function(item) {
             return $(item).text();
@@ -340,6 +343,10 @@
         Title: "企查查",
         Host: "https://qcc.com",
         SearchUrl: "/search?key="
+    }, {
+        Title: "爱企查",
+        Host: "https://aiqicha.baidu.com",
+        SearchUrl: "/s?q="
     }, {
         Title: "百度信誉",
         Host: "https://xin.baidu.com",
