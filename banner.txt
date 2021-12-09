@@ -1,0 +1,28 @@
+// ==UserScript==
+// @name         <%= nameZh %>
+// @namespace    https://github.com/qq943260285
+// @version      <%= version %>
+// @description  <%= description %>
+// @author       <%= author %>
+// @license      <%= license %>
+// @icon         <%= icon %>
+// @create       <%= create %>
+// @lastmodified <%= lastmodified %>
+// @home-url     https://greasyfork.org/zh-TW/scripts/380848
+// @supportURL   <%= git %>
+// @feedback-url <%= git %>
+// @note         2021-03-01 1.智联招聘改版调整（感谢各位使用者反馈，谢谢）2.更新ico图标
+// @match        *://search.51job.com/*
+// @match        *://sou.zhaopin.com/*
+// @match        *://www.zhipin.com/*
+// @match        *://www.lagou.com/*
+// @match        *://www.liepin.com/*
+// @match        *://*.58.com/*
+// @match        *://zhaopin.baidu.com/quanzhi*
+// @require      https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js
+// @grant        GM_getValue
+// @grant        GM.getValue
+// @grant        GM_setValue
+// @grant        GM.setValue
+// @grant		 GM_addStyle
+// ==/UserScript==

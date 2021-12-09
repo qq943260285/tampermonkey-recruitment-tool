@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../../dist/css/Window.css">
+    <script src="../../../tmp/es5/module/Window/WindowXYZS.js"></script>
+</head>
+<body>
+<button id="show1">显示1</button>
+<button id="show2">显示2</button>
+<button id="hide">关闭</button>
+</body>
+<script>
+    (function () {
+       var win= $.WindowXYZS("132",$('<div>内容</div>'));
+        $("#show1").click(function () {
+            console.log("-111")
+            win.show()
+            console.log("111-")
+        })
+        $("#show2").click(function () {
+            console.log("-222")
+            win.show("1",$('<div>内容1</div>'))
+            console.log("222-")
+        })
+    })()
+</script>
+</html>

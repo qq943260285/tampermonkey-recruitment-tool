@@ -1,21 +1,23 @@
 module.exports = function (grunt) {
+    let pkg = grunt.file.readJSON('package.json');
+    pkg.lastmodified = grunt.template.date(new Date(), 'yyyy-mm-dd');
+    let banner = grunt.template.process(grunt.file.read('banner.txt'), {data: pkg});
     grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
+        pkg: pkg,
+        clean: {
+            dist: 'dist',
+            tmp: 'tmp'
+        },
         babel: {
             options: {
                 sourceMap: false,
                 presets: ['@babel/preset-env']
             },
-            dist: {
-                files: {
-                    'tmp/tampermonkey-recruitment-tool.es5.js': 'src/tampermonkey-recruitment-tool.js'
-                }
-            },
-            dist2: {
+            go: {
                 files: [{
                     expand: true,
                     cwd: 'src/',
-                    src: ['*.js', 'js/*.js'],
+                    src: ['**/*.js', '!**/*.min.js'],
                     dest: 'tmp/es5'
                 }]
             }
@@ -27,7 +29,7 @@ module.exports = function (grunt) {
             }
         },
         uglify: {
-            xyzsBuild: {
+            go: {
                 options: {
                     mangle: false,
                     compress: {
@@ -47,126 +49,104 @@ module.exports = function (grunt) {
                     },
                     preserveComments: false,
                     beautify: true,
-                    banner: `// ==UserScript==
-// @name         高级求职助手/招聘网站助手，支持前程无忧、智联招聘、BOSS直聘、拉钩、猎聘
-// @namespace    https://github.com/qq943260285
-// @version      1.3
-// @description  1.快捷添加企业黑名单；2.支持正则表达式黑名单；3.支持前程无忧、智联招聘、BOSS直聘、拉钩、猎聘;4.各大网站黑名单数据连通。
-// @author       小宇专属(943260285@qq.com)
-// @license      GPL-3.0-only
-// @icon         https://qq943260285.github.io/favicon.png
-// @create       2019-3-25
-// @lastmodified 2019-3-25
-// @home-url     https://greasyfork.org/zh-TW/scripts/380848
-// @supportURL   https://github.com/qq943260285/tampermonkey-recruitment-tool.git
-// @feedback-url https://github.com/qq943260285/tampermonkey-recruitment-tool.git
-// @note         2019.3.25-V0.1 初始化项目添加黑名单功能，后续视情况添加功能
-// @match        *://search.51job.com/*
-// @match        *://sou.zhaopin.com/*
-// @match        *://www.zhipin.com/*
-// @match        *://www.lagou.com/*
-// @match        *://www.liepin.com/*
-// @require      https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js
-// @grant        GM_getValue
-// @grant        GM.getValue
-// @grant        GM_setValue
-// @grant        GM.setValue
-// @grant		 GM_addStyle
-// ==/UserScript==`,
-                    footer: '\n/*! <%= pkg.name %> 最后修改于： <%= grunt.template.today("yyyy-mm-dd") %> */'
+                    banner: banner,
                 },
                 files: {
-                    'dist/tampermonkey-recruitment-tool.min.js': ['tmp/tampermonkey-recruitment-tool.es5.js']
+                    'dist/js/index.js': ['tmp/es5/module/FloatingTool/FloatingToolXYZS.js', 'tmp/es5/module/Window/WindowXYZS.js', 'tmp/es5/index.js']
                 }
             },
-            xyzsBuild2: {
-                options: {
-                    mangle: false,
-                    compress: {
-                        drop_console: true,
-                        sequences: true,
-                        conditionals: false,
-                        comparisons: true,
-                        booleans: true,
-                        loops: true,
-                        hoist_funs: true,
-                        if_return: false,
-                        inline: false,
-                        join_vars: true,
-                        reduce_vars: true,
-                        negate_iife: false,
-                        passes: 1,
-                    },
-                    preserveComments: false,
-                    beautify: true,
-                },
+        },
+        cssmin: {
+            go: {
                 files: [{
                     expand: true,
-                    cwd: 'tmp/es5',//js目录下
-                    src: '**/*.js',//所有js文件
-                    dest: 'dist/js'//输出到此目录下
+                    cwd: 'src/css',
+                    src: ['**/*.css', '!**/*.min.css'],
+                    dest: 'tmp/css'
                 }]
             },
-            xyzsBuild3: {
-                options: {
-                    mangle: false,
-                    compress: {
-                        drop_console: true,
-                        sequences: true,
-                        conditionals: false,
-                        comparisons: true,
-                        booleans: true,
-                        loops: true,
-                        hoist_funs: true,
-                        if_return: false,
-                        inline: false,
-                        join_vars: true,
-                        reduce_vars: true,
-                        negate_iife: false,
-                        passes: 1,
+            module: {
+                files: [
+                    {
+                        'dist/css/FloatingTool.css': ['tmp/module/FloatingTool/FloatingTool.css']
                     },
-                    preserveComments: false,
-                    beautify: true,
-                    banner: `// ==UserScript==
-// @name         高级求职助手/招聘网站助手，支持前程无忧、智联招聘、BOSS直聘、拉钩网、猎聘网、百度百聘、58同城
-// @namespace    https://github.com/qq943260285
-// @version      3.21.0301
-// @description  1.快捷添加企业黑名单；2.快捷公司/企业信息查询，支持天眼查、看准、企查查、百度信誉、百度搜索3.支持全网热门招聘网站，前程无忧、智联招聘、BOSS直聘、拉钩网、猎聘网、百度百聘、58同城;4.各大网站黑名单数据连通。
-// @author       小宇专属(943260285@qq.com)
-// @license      GPL-3.0-only
-// @icon         https://raw.githubusercontent.com/qq943260285/tampermonkey-recruitment-tool/master/assets/logo_ico.png
-// @create       2019-03-25
-// @lastmodified 2021-03-01
-// @home-url     https://greasyfork.org/zh-TW/scripts/380848
-// @supportURL   https://github.com/qq943260285/tampermonkey-recruitment-tool.git
-// @feedback-url https://github.com/qq943260285/tampermonkey-recruitment-tool.git
-// @note         2021-03-01 1.智联招聘改版调整（感谢各位使用者反馈，谢谢）2.更新ico图标
-// @match        *://search.51job.com/*
-// @match        *://sou.zhaopin.com/*
-// @match        *://www.zhipin.com/*
-// @match        *://www.lagou.com/*
-// @match        *://www.liepin.com/*
-// @match        *://*.58.com/*
-// @match        *://zhaopin.baidu.com/quanzhi*
-// @require      https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js
-// @grant        GM_getValue
-// @grant        GM.getValue
-// @grant        GM_setValue
-// @grant        GM.setValue
-// @grant		 GM_addStyle
-// ==/UserScript==`,
-                },
+                    {
+                        'dist/css/Window.css': ['tmp/module/Window/Window.css']
+                    }
+                ]
+            },
+            index: {
                 files: {
-                    'dist/js/tampermonkey-recruitment-tool.xx.js': ['tmp/es5/js/FloatingToolXYZS.js','tmp/es5/js/WindowXYZS.js','tmp/es5/tampermonkey-recruitment-tool.js']
+                    'dist/css/index.css': ['tmp/css/index.css']
                 }
             },
-        }
+            all: {
+                files: [{
+                    expand: true,
+                    cwd: 'tmp',
+                    src: ['**/*.css'],
+                    filter: 'isFile',
+                    rename: function () {
+                        return 'dist/css/index.css';
+                    }
+                }
+                ]
+            }
+        },
+        less: {
+            module: {
+                files: [{
+                    expand: true,
+                    cwd: 'src',
+                    src: ['**/*.less'],
+                    dest: 'tmp',
+                    ext: '.css',
+                    filter: 'isFile',
+                }]
+            },
+        },
+        copy: {
+            go: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'src/',
+                        src: ['**/*.min.js', '**/*.min.css'],
+                        dest: 'tmp/',
+                        filter: 'isFile'
+                    },
+                ]
+            }
+        },
     });
+
+    grunt.task.registerTask('build', 'build', function () {
+        console.log(pkg.name)
+        let indexCss = grunt.file.read('dist/css/index.css');
+        let floatingToolCss = grunt.file.read('dist/css/FloatingTool.css');
+        let windowCss = grunt.file.read('dist/css/Window.css');
+        let indexjs = grunt.file.read('dist/js/index.js');
+        let indexInitjs = grunt.template.process(indexjs, {
+            data: {
+                IndexCss: indexCss,
+                FloatingToolCss: floatingToolCss,
+                WindowCss: windowCss
+            }
+        });
+        grunt.file.write("dist/" + pkg.name + ".js", indexInitjs)
+        grunt.log.ok("完成合并")
+    });
+
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-babel');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-less');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.registerTask('default', ['watch']);//cmd:grunt
-    grunt.registerTask('xiaoyu', ['babel:dist2', 'uglify:xyzsBuild3',]);//cmd:grunt xiaoyu
+    grunt.registerTask('test-clean', ['clean']);
+    grunt.registerTask('xyzs', ['clean', 'copy', 'babel', 'uglify', 'less', 'cssmin:module', 'cssmin:index', 'build']);//cmd:grunt xiaoyu
 }
 
 
