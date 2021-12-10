@@ -23,9 +23,9 @@ module.exports = function (grunt) {
             }
         },
         watch: {
-            firct: {
-                files: 'src/*.js',
-                tasks: 'xiaoyu'
+            go: {
+                files: ['src/**/*.js', 'src/**/*.css', 'src/**/*.less'],
+                tasks: 'xyzs'
             }
         },
         uglify: {

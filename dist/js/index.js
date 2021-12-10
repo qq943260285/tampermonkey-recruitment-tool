@@ -129,7 +129,7 @@
                     return $('<div title="企业查询" class="xyzs-search-div"><i class="fa fa-search xyzs-search-ico"></i></div>').append(function() {
                         var lists = $('<div class="xyzs-search-div-lists"></div>');
                         return $.each(searchList, function(i, o) {
-                            lists.append($('<div title="' + o.Title + '" class="xyzs-search-div-list"><img class="xyzs-search-div-list-img" src="' + o.Host + '/favicon.ico"></div>').click(function() {
+                            if (o.Show) lists.append($('<div title="' + o.Title + '" class="xyzs-search-div-list"><img class="xyzs-search-div-list-img" src="' + o.Host + '/favicon.ico"></div>').click(function() {
                                 return window.open(o.Host + o.SearchUrl + encodeURI(blacklistFunction.NameJqToNameText(blacklistFunction.ItemToNameJq(blacklistFunction.DleButtonToItem(this))))), 
                                 !1;
                             }));
@@ -191,6 +191,39 @@
             }), $.WindowXYZS().show("支持网站  <span onclick='window.open(\"https://github.com/qq943260285/tampermonkey-recruitment-tool/issues\",\"_blank\");' title='点击反馈' style='cursor:pointer;font-size: 9px;color: #ff5c4c;'>[欢迎提建议和反馈问题（点击）]</span>", div);
         }
     }, {
+        ico: "fa-cog",
+        title: "设置",
+        callback: function() {
+            var div = $('<div class="xyzs-stand-list xyzs-scrollbar" ></div>');
+            $.each(searchList, function(index, item) {
+                var icoUrl = item.Ico || item.Host + "/favicon.ico";
+                item.div = $('<div class="xyzs-stand-item" index=' + index + '><img style="width: 16px;height: 16px;" src="' + icoUrl + '"><span>' + item.Title + "</span></div>");
+                var i1 = $('<i title="上移" class="fa fa-arrow-up xyzs-enterprise-item-ico"></i>').click(function() {
+                    var index = Number($(i1).parent().attr("index"));
+                    if (0 != index) {
+                        var this_tmp = searchList[index], tmp = searchList[index - 1];
+                        tmp.div.insertAfter(this_tmp.div), tmp.div.attr("index", index), this_tmp.div.attr("index", index - 1), 
+                        searchList[index - 1] = this_tmp, searchList[index] = tmp;
+                    }
+                });
+                item.div.append(i1);
+                var i2 = $('<i title="下移" class="fa fa-arrow-down xyzs-enterprise-item-ico"></i>').click(function() {
+                    var index = Number($(i2).parent().attr("index"));
+                    if (index != searchList.length - 1) {
+                        var this_tmp = searchList[index], tmp = searchList[index + 1];
+                        tmp.div.insertBefore(this_tmp.div), tmp.div.attr("index", index), this_tmp.div.attr("index", index + 1), 
+                        searchList[index + 1] = this_tmp, searchList[index] = tmp;
+                    }
+                });
+                item.div.append(i2);
+                var i3 = $('<i title="显示/隐藏" class="fa ' + (item.Show ? "fa-eye" : "fa-eye-slash") + ' xyzs-enterprise-item-ico"></i>').click(function() {
+                    var index = Number($(i3).parent().attr("index"));
+                    searchList[index].Show = !searchList[index].Show, i3.toggleClass("fa-eye"), i3.toggleClass("fa-eye-slash");
+                });
+                item.div.append(i3), div.append(item.div);
+            }), $.WindowXYZS().show("设置", div);
+        }
+    }, {
         ico: "fa-podcast",
         title: "作者博客",
         callback: function() {
@@ -203,7 +236,7 @@
             window.open("https://github.com/qq943260285/tampermonkey-recruitment-tool.git");
         }
     } ]);
-    var regExpCharacter = [ "\\", "$", "(", ")", "{", "}", "*", "+", ".", "[", "]", "?", "^", "|" ], blacklistKey = "blacklist", blacklistList = GM_getValue(blacklistKey) ? JSON.parse(GM_getValue(blacklistKey)) : [], blacklistFunction = {
+    var regExpCharacter = [ "\\", "$", "(", ")", "{", "}", "*", "+", ".", "[", "]", "?", "^", "|" ], blacklistKey = "blacklist", blacklistList = "function" == typeof GM_getValue ? JSON.parse(GM_getValue(blacklistKey)) || [] : [], blacklistFunction = {
         WebName: null,
         WebUrl: null,
         IsRefresh: null,
@@ -334,27 +367,34 @@
     } ], searchList = [ {
         Title: "天眼查",
         Host: "https://tianyancha.com",
-        SearchUrl: "/search?key="
+        SearchUrl: "/search?key=",
+        Show: !0
     }, {
         Title: "看准",
         Host: "https://kanzhun.com",
-        SearchUrl: "/search/?type=company&q="
+        SearchUrl: "/search/?type=company&q=",
+        Show: !0
     }, {
         Title: "企查查",
         Host: "https://qcc.com",
-        SearchUrl: "/search?key="
+        SearchUrl: "/search?key=",
+        Show: !0
     }, {
         Title: "爱企查",
         Host: "https://aiqicha.baidu.com",
-        SearchUrl: "/s?q="
+        SearchUrl: "/s?q=",
+        Ico: "http://xinpub.cdn.bcebos.com/static/favicon.ico",
+        Show: !0
     }, {
         Title: "百度信誉",
         Host: "https://xin.baidu.com",
-        SearchUrl: "/s?q="
+        SearchUrl: "/s?q=",
+        Show: !0
     }, {
         Title: "百度搜索",
         Host: "https://baidu.com",
-        SearchUrl: "/s?wd="
+        SearchUrl: "/s?wd=",
+        Show: !0
     } ];
     (function() {
         for (var i = 0; i < WebJqList.length; i++) if (-1 != window.location.host.indexOf(WebJqList[i].WebUrl)) {

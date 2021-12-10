@@ -44,13 +44,54 @@
                 $.WindowXYZS().show("支持网站  <span onclick='window.open(\"https://github.com/qq943260285/tampermonkey-recruitment-tool/issues\",\"_blank\");' title='点击反馈' style='cursor:pointer;font-size: 9px;color: #ff5c4c;'>[欢迎提建议和反馈问题（点击）]</span>", div)
             }
         },
-        // {
-        //     ico: "fa-cog",
-        //     title: "设置",
-        //     callback: function () {
-        //         // console.log("设置");
-        //     }
-        // },
+        {
+            ico: "fa-cog",
+            title: "设置",
+            callback: function () {
+                console.log("设置");
+                let div = $(`<div class="xyzs-stand-list xyzs-scrollbar" ></div>`);
+                $.each(searchList, function (index, item) {
+                    let icoUrl = item.Ico || (item.Host + "/favicon.ico")
+                    item["div"] = $(`<div class="xyzs-stand-item" index=` + index + `><img style="width: 16px;height: 16px;" src="` + icoUrl + `"><span>` + item.Title + `</span></div>`)
+                    let i1 = $(`<i title="上移" class="fa fa-arrow-up xyzs-enterprise-item-ico"></i>`).click(() => {
+                        let index = Number($(i1).parent().attr("index"));
+                        if (index != 0) {
+                            let this_tmp = searchList[index];
+                            let tmp = searchList[index - 1];
+                            tmp["div"].insertAfter(this_tmp["div"])
+                            tmp["div"].attr("index", index)
+                            this_tmp["div"].attr("index", index - 1)
+                            searchList[index - 1] = this_tmp
+                            searchList[index] = tmp
+                        }
+                    })
+                    item["div"].append(i1)
+                    let i2 = $(`<i title="下移" class="fa fa-arrow-down xyzs-enterprise-item-ico"></i>`).click(() => {
+                        let index = Number($(i2).parent().attr("index"));
+                        if (index != searchList.length - 1) {
+                            let this_tmp = searchList[index];
+                            let tmp = searchList[index + 1];
+                            tmp["div"].insertBefore(this_tmp["div"])
+                            tmp["div"].attr("index", index)
+                            this_tmp["div"].attr("index", index + 1)
+                            searchList[index + 1] = this_tmp
+                            searchList[index] = tmp
+                        }
+                    })
+                    item["div"].append(i2)
+                    let i3 = $(`<i title="显示/隐藏" class="fa ` + (item.Show ? "fa-eye" : "fa-eye-slash") + ` xyzs-enterprise-item-ico"></i>`).click(() => {
+                        let index = Number($(i3).parent().attr("index"));
+                        searchList[index].Show = !searchList[index].Show;
+                        i3.toggleClass("fa-eye");
+                        i3.toggleClass("fa-eye-slash");
+                        console.log(searchList)
+                    })
+                    item["div"].append(i3)
+                    div.append(item["div"])
+                });
+                $.WindowXYZS().show("设置", div)
+            }
+        },
         {
             ico: "fa-podcast",
             title: "作者博客",
@@ -74,7 +115,7 @@
     //========== 功能相关 ==========
     let regExpCharacter = ['\\', '$', '(', ')', '{', '}', '*', '+', '.', '[', ']', '?', '^', '|']
         , blacklistKey = 'blacklist'
-        , blacklistList = GM_getValue(blacklistKey) ? JSON.parse(GM_getValue(blacklistKey)) : []
+        , blacklistList = typeof (GM_getValue) == "function" ? JSON.parse(GM_getValue(blacklistKey)) || [] : []
         , blacklistFunction = {
             //网站名
             WebName: null,
@@ -173,32 +214,39 @@
             {
                 Title: '天眼查',
                 Host: "https://tianyancha.com",
-                SearchUrl: '/search?key='
+                SearchUrl: '/search?key=',
+                Show: true
             },
             {
                 Title: '看准',
                 Host: "https://kanzhun.com",
-                SearchUrl: '/search/?type=company&q='
+                SearchUrl: '/search/?type=company&q=',
+                Show: true
             },
             {
                 Title: '企查查',
                 Host: "https://qcc.com",
-                SearchUrl: '/search?key='
+                SearchUrl: '/search?key=',
+                Show: true
             },
             {
                 Title: '爱企查',
                 Host: "https://aiqicha.baidu.com",
-                SearchUrl: '/s?q='
+                SearchUrl: '/s?q=',
+                Ico: "http://xinpub.cdn.bcebos.com/static/favicon.ico",
+                Show: true
             },
             {
                 Title: '百度信誉',
                 Host: "https://xin.baidu.com",
-                SearchUrl: '/s?q='
+                SearchUrl: '/s?q=',
+                Show: true
             },
             {
                 Title: '百度搜索',
                 Host: "https://baidu.com",
-                SearchUrl: '/s?wd='
+                SearchUrl: '/s?wd=',
+                Show: true
             },
         ]
     ;
@@ -306,19 +354,21 @@
                                 function () {
                                     let lists = $('<div class="xyzs-search-div-lists"></div>');
                                     $.each(searchList, function (i, o) {
-                                        lists.append(
-                                            $('<div title="' + o.Title + '" class="xyzs-search-div-list"><img class="xyzs-search-div-list-img" src="' + o.Host + '/favicon.ico"></div>')
-                                                .click(function () {
-                                                    window.open(o.Host + o.SearchUrl +
-                                                        encodeURI(
-                                                            blacklistFunction.NameJqToNameText(
-                                                                blacklistFunction.ItemToNameJq(
-                                                                    blacklistFunction.DleButtonToItem(this)
-                                                                )
-                                                            )));
-                                                    return false;
-                                                })
-                                        )
+                                        if (o.Show) {
+                                            lists.append(
+                                                $('<div title="' + o.Title + '" class="xyzs-search-div-list"><img class="xyzs-search-div-list-img" src="' + o.Host + '/favicon.ico"></div>')
+                                                    .click(function () {
+                                                        window.open(o.Host + o.SearchUrl +
+                                                            encodeURI(
+                                                                blacklistFunction.NameJqToNameText(
+                                                                    blacklistFunction.ItemToNameJq(
+                                                                        blacklistFunction.DleButtonToItem(this)
+                                                                    )
+                                                                )));
+                                                        return false;
+                                                    })
+                                            )
+                                        }
                                     });
                                     return lists;
                                 }()
