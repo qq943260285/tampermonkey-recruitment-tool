@@ -115,6 +115,20 @@
         }
     });
 }(jQuery), function() {
+    function saveSearchList() {
+        for (var arr = [], i = 0; i < searchList.length; i++) {
+            var item = searchList[i];
+            arr.push({
+                Id: item.Id,
+                Title: item.Title,
+                Host: item.Host,
+                SearchUrl: item.SearchUrl,
+                Ico: item.Ico,
+                Show: item.Show
+            });
+        }
+        if ("function" == typeof GM_setValue) GM_setValue(searchListKey, arr);
+    }
     function blacklistRefresh() {
         blacklistFilter(), function() {
             blacklistFunction.HtmlToList().each(function(index, element) {
@@ -203,7 +217,7 @@
                     if (0 != index) {
                         var this_tmp = searchList[index], tmp = searchList[index - 1];
                         tmp.div.insertAfter(this_tmp.div), tmp.div.attr("index", index), this_tmp.div.attr("index", index - 1), 
-                        searchList[index - 1] = this_tmp, searchList[index] = tmp;
+                        searchList[index - 1] = this_tmp, searchList[index] = tmp, saveSearchList();
                     }
                 });
                 item.div.append(i1);
@@ -212,13 +226,14 @@
                     if (index != searchList.length - 1) {
                         var this_tmp = searchList[index], tmp = searchList[index + 1];
                         tmp.div.insertBefore(this_tmp.div), tmp.div.attr("index", index), this_tmp.div.attr("index", index + 1), 
-                        searchList[index + 1] = this_tmp, searchList[index] = tmp;
+                        searchList[index + 1] = this_tmp, searchList[index] = tmp, saveSearchList();
                     }
                 });
                 item.div.append(i2);
                 var i3 = $('<i title="显示/隐藏" class="fa ' + (item.Show ? "fa-eye" : "fa-eye-slash") + ' xyzs-enterprise-item-ico"></i>').click(function() {
                     var index = Number($(i3).parent().attr("index"));
-                    searchList[index].Show = !searchList[index].Show, i3.toggleClass("fa-eye"), i3.toggleClass("fa-eye-slash");
+                    searchList[index].Show = !searchList[index].Show, i3.toggleClass("fa-eye"), i3.toggleClass("fa-eye-slash"), 
+                    saveSearchList();
                 });
                 item.div.append(i3), div.append(item.div);
             }), $.WindowXYZS().show("设置", div);
@@ -236,7 +251,7 @@
             window.open("https://github.com/qq943260285/tampermonkey-recruitment-tool.git");
         }
     } ]);
-    var regExpCharacter = [ "\\", "$", "(", ")", "{", "}", "*", "+", ".", "[", "]", "?", "^", "|" ], blacklistKey = "blacklist", blacklistList = "function" == typeof GM_getValue ? JSON.parse(GM_getValue(blacklistKey)) || [] : [], blacklistFunction = {
+    var regExpCharacter = [ "\\", "$", "(", ")", "{", "}", "*", "+", ".", "[", "]", "?", "^", "|" ], blacklistKey = "blacklist", searchListKey = "searchList", blacklistList = "function" == typeof GM_getValue ? JSON.parse(GM_getValue(blacklistKey)) || [] : [], blacklistFunction = {
         WebName: null,
         WebUrl: null,
         IsRefresh: null,
@@ -364,33 +379,39 @@
         DleButtonToItem: function(item) {
             return $(item).closest(".single");
         }
-    } ], searchList = [ {
+    } ], searchList = "function" == typeof GM_getValue ? JSON.parse(GM_getValue(searchListKey)) || [] : [], defaultSearchList = [ {
+        Id: 1,
         Title: "天眼查",
         Host: "https://tianyancha.com",
         SearchUrl: "/search?key=",
         Show: !0
     }, {
+        Id: 2,
         Title: "看准",
         Host: "https://kanzhun.com",
         SearchUrl: "/search/?type=company&q=",
         Show: !0
     }, {
+        Id: 3,
         Title: "企查查",
         Host: "https://qcc.com",
         SearchUrl: "/search?key=",
         Show: !0
     }, {
+        Id: 4,
         Title: "爱企查",
         Host: "https://aiqicha.baidu.com",
         SearchUrl: "/s?q=",
         Ico: "http://xinpub.cdn.bcebos.com/static/favicon.ico",
         Show: !0
     }, {
+        Id: 5,
         Title: "百度信誉",
         Host: "https://xin.baidu.com",
         SearchUrl: "/s?q=",
         Show: !0
     }, {
+        Id: 6,
         Title: "百度搜索",
         Host: "https://baidu.com",
         SearchUrl: "/s?wd=",
@@ -400,6 +421,13 @@
         for (var i = 0; i < WebJqList.length; i++) if (-1 != window.location.host.indexOf(WebJqList[i].WebUrl)) {
             blacklistFunction = WebJqList[i];
             break;
+        }
+        for (var _i = 0; _i < defaultSearchList.length; _i++) {
+            for (var exist = !1, item = defaultSearchList[_i], j = 0; j < searchList.length; j++) if (searchList[j].Id === item.Id) {
+                exist = !0;
+                break;
+            }
+            if (!exist) searchList.push(item), saveSearchList();
         }
         if (blacklistRefresh(), blacklistFunction.IsRefresh) setInterval(blacklistRefresh, 3e3);
     })();

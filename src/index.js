@@ -63,6 +63,7 @@
                             this_tmp["div"].attr("index", index - 1)
                             searchList[index - 1] = this_tmp
                             searchList[index] = tmp
+                            saveSearchList()
                         }
                     })
                     item["div"].append(i1)
@@ -76,6 +77,7 @@
                             this_tmp["div"].attr("index", index + 1)
                             searchList[index + 1] = this_tmp
                             searchList[index] = tmp
+                            saveSearchList()
                         }
                     })
                     item["div"].append(i2)
@@ -85,6 +87,7 @@
                         i3.toggleClass("fa-eye");
                         i3.toggleClass("fa-eye-slash");
                         console.log(searchList)
+                        saveSearchList()
                     })
                     item["div"].append(i3)
                     div.append(item["div"])
@@ -112,9 +115,13 @@
     $.FloatingToolXYZS(menuItems);
 
 
-    //========== 功能相关 ==========
+    /**
+     * 功能相关
+     * @type {string[]}
+     */
     let regExpCharacter = ['\\', '$', '(', ')', '{', '}', '*', '+', '.', '[', ']', '?', '^', '|']
         , blacklistKey = 'blacklist'
+        , searchListKey = 'searchList'
         , blacklistList = typeof (GM_getValue) == "function" ? JSON.parse(GM_getValue(blacklistKey)) || [] : []
         , blacklistFunction = {
             //网站名
@@ -210,26 +217,33 @@
                 NameJqToNameText: (item) => $(item).text(),
                 DleButtonToItem: (item) => $(item).closest('.single')
             }],
-        searchList = [
+
+        searchList = (typeof (GM_getValue) == "function") ? JSON.parse(GM_getValue(searchListKey)) || [] : [],
+
+        defaultSearchList = [
             {
+                Id: 1,
                 Title: '天眼查',
                 Host: "https://tianyancha.com",
                 SearchUrl: '/search?key=',
                 Show: true
             },
             {
+                Id: 2,
                 Title: '看准',
                 Host: "https://kanzhun.com",
                 SearchUrl: '/search/?type=company&q=',
                 Show: true
             },
             {
+                Id: 3,
                 Title: '企查查',
                 Host: "https://qcc.com",
                 SearchUrl: '/search?key=',
                 Show: true
             },
             {
+                Id: 4,
                 Title: '爱企查',
                 Host: "https://aiqicha.baidu.com",
                 SearchUrl: '/s?q=',
@@ -237,12 +251,14 @@
                 Show: true
             },
             {
+                Id: 5,
                 Title: '百度信誉',
                 Host: "https://xin.baidu.com",
                 SearchUrl: '/s?q=',
                 Show: true
             },
             {
+                Id: 6,
                 Title: '百度搜索',
                 Host: "https://baidu.com",
                 SearchUrl: '/s?wd=',
@@ -251,7 +267,9 @@
         ]
     ;
 
-    //====== 初始化 =======
+    /**
+     * 初始化
+     */
     function blacklistInit() {
 
         //站点方法初始化
@@ -263,12 +281,51 @@
                 break;
             }
         }
+        for (let i = 0; i < defaultSearchList.length; i++) {
+            let exist = false
+            let item = defaultSearchList[i]
+            for (let j = 0; j < searchList.length; j++) {
+                if (searchList[j].Id === item.Id) {
+                    exist = true
+                    break;
+                }
+            }
+            if (!exist) {
+                searchList.push(item)
+                saveSearchList()
+            }
+        }
         //刷新
         blacklistRefresh();
         if (blacklistFunction.IsRefresh) setInterval(blacklistRefresh, 3000);
     }
 
-    //====== 刷新 ======
+    /**
+     * 保存搜索引擎配置
+     */
+    function saveSearchList() {
+        let arr = []
+        for (let i = 0; i < searchList.length; i++) {
+            let item = searchList[i];
+            arr.push({
+                Id: item.Id,
+                Title: item.Title,
+                Host: item.Host,
+                SearchUrl: item.SearchUrl,
+                Ico: item.Ico,
+                Show: item.Show
+            })
+        }
+        if (typeof (GM_setValue) == "function") {
+            GM_setValue(searchListKey, arr)
+        } else {
+            console.log("保存数据Key", searchListKey, arr)
+        }
+    }
+
+    /**
+     * 刷新
+     */
     function blacklistRefresh() {
         console.log("---")
         //过滤列表
@@ -277,7 +334,9 @@
         createDelDiv();
     }
 
-    //====== 过滤列表 ======
+    /**
+     * 过滤列表
+     */
     function blacklistFilter() {
         blacklistFunction.HtmlToList().each(function (index, element) {
             let isShow = true;
@@ -308,7 +367,10 @@
         });
     }
 
-    //====== 添加黑名单 ======
+    /**
+     * 添加黑名单
+     * @param name
+     */
     function addDlacklistName(name) {
         name += '';
         if (blacklistList.indexOf(name) === -1) {
@@ -321,7 +383,10 @@
         blacklistFilter();
     }
 
-    //====== 删除黑名单 ======
+    /**
+     * 删除黑名单
+     * @param name
+     */
     function dleDlacklistName(name) {
         if (blacklistList.indexOf(name) > -1) {
             blacklistList.splice(blacklistList.indexOf(name), 1);
@@ -330,7 +395,9 @@
         blacklistFilter();
     }
 
-    //====== 创建隐藏按钮 ======
+    /**
+     * 创建隐藏按钮
+     */
     function createDelDiv() {
         blacklistFunction.HtmlToList().each(function (index, element) {
             if ($(element).find('.xyzs-del-div').length === 0) {
