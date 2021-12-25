@@ -11,7 +11,7 @@
 // @home-url     https://greasyfork.org/zh-TW/scripts/380848
 // @supportURL   <%= git %>
 // @feedback-url <%= git %>
-// @note         2021-12-10 1.修复猎聘网改版支持；2.添加爱企查企业信息查询；3.优化代码及匹配规则；
+// @note         2021-12-25 1.添加企业搜索引擎管理；2.优化程序运行性能；3.精简程序菜单；
 // @match        *://search.51job.com/*
 // @match        *://sou.zhaopin.com/*
 // @match        *://www.zhipin.com/*
