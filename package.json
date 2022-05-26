@@ -10,7 +10,7 @@
     "@babel/core": "^7.4.0",
     "@babel/preset-env": "^7.4.2",
     "babel-core": "^6.26.3",
-    "grunt": "^1.4.1",
+    "grunt": "^1.5.3",
     "grunt-babel": "^8.0.0",
     "grunt-contrib-clean": "^2.0.0",
     "grunt-contrib-copy": "^1.0.0",
