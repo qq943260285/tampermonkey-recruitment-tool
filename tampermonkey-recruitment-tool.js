@@ -1,17 +1,17 @@
 // ==UserScript==
 // @name         高级求职助手/招聘网站助手，支持前程无忧、智联招聘、BOSS直聘、拉钩网、猎聘网、百度百聘、58同城
 // @namespace    https://github.com/qq943260285
-// @version      4.21.1225
+// @version      4.22.0719
 // @description  1.快捷添加企业黑名单；2.快捷公司/企业信息查询，支持天眼查、看准、企查查、爱企查、百度信誉、百度搜索3.支持全网热门招聘网站，前程无忧、智联招聘、BOSS直聘、拉钩网、猎聘网、百度百聘、58同城;4.各大网站黑名单数据连通。
 // @author       小宇专属
 // @license      GPL-3.0-only
 // @icon         https://raw.githubusercontent.com/qq943260285/tampermonkey-recruitment-tool/master/assets/logo_ico.png
 // @create       2019-03-25
-// @lastmodified 2021-12-25
+// @lastmodified 2022-07-19
 // @home-url     https://greasyfork.org/zh-TW/scripts/380848
 // @supportURL   https://github.com/qq943260285/tampermonkey-recruitment-tool.git
 // @feedback-url https://github.com/qq943260285/tampermonkey-recruitment-tool.git
-// @note         2021-12-25 1.添加企业搜索引擎管理；2.优化程序运行性能；3.精简程序菜单；
+// @note         2022-7-19 1.修复BOSS招聘失效问题 2.修复搜索条图标显示  3.调整搜索条图标顺序 4.修复拉钩网失效问题
 // @match        *://search.51job.com/*
 // @match        *://sou.zhaopin.com/*
 // @match        *://www.zhipin.com/*
@@ -299,13 +299,13 @@
     }, {
         WebName: "BOSS直聘",
         WebUrl: "www.zhipin.com",
-        IsRefresh: !1,
+        IsRefresh: !0,
         DleButtonStyle: "float: left;",
         HtmlToList: function() {
-            return $(".company-text h3 a[ka]").closest("li");
+            return $(".company-name a[ka]").closest("li");
         },
         ItemToNameJq: function(item) {
-            return $(item).find(".company-text h3 a[ka]");
+            return $(item).find(".company-name a[ka]");
         },
         NameJqToNameText: function(item) {
             return $(item).text();
@@ -319,16 +319,16 @@
         IsRefresh: !0,
         DleButtonStyle: "float: left;",
         HtmlToList: function() {
-            return $("li .company_name a[data-lg-tj-cid]").closest("li");
+            return $("#jobList").children("div").eq(0).children("div");
         },
         ItemToNameJq: function(item) {
-            return $(item).find(".company_name a[data-lg-tj-cid]");
+            return $(item).children("div").eq(0).children("div").eq(1).children("div").eq(0).children("a").eq(0);
         },
         NameJqToNameText: function(item) {
             return $(item).text();
         },
         DleButtonToItem: function(item) {
-            return $(item).closest("li");
+            return $(item).closest("div[xyzs]");
         }
     }, {
         WebName: "猎聘网",
@@ -381,7 +381,7 @@
         DleButtonToItem: function(item) {
             return $(item).closest(".single");
         }
-    } ], searchList = "function" == typeof GM_getValue ? JSON.parse(GM_getValue(searchListKey) || "[]") : [], defaultSearchList = [ {
+    } ], searchList = 0 ? JSON.parse(GM_getValue(searchListKey) || "[]") : [], defaultSearchList = [ {
         Id: 1,
         Title: "天眼查",
         Host: "https://tianyancha.com",
@@ -389,31 +389,26 @@
         Show: !0
     }, {
         Id: 2,
+        Title: "爱企查",
+        Host: "https://aiqicha.baidu.com",
+        SearchUrl: "s?t=0&q=",
+        Ico: "http://xinpub.cdn.bcebos.com/static/favicon.ico",
+        Show: !0
+    }, {
+        Id: 3,
         Title: "看准",
         Host: "https://kanzhun.com",
         SearchUrl: "/search/?type=company&q=",
         Show: !0
     }, {
-        Id: 3,
+        Id: 4,
         Title: "企查查",
         Host: "https://qcc.com",
-        SearchUrl: "/search?key=",
-        Show: !0
-    }, {
-        Id: 4,
-        Title: "爱企查",
-        Host: "https://aiqicha.baidu.com",
-        SearchUrl: "/s?q=",
-        Ico: "http://xinpub.cdn.bcebos.com/static/favicon.ico",
+        SearchUrl: "web/search?key=",
+        Ico: "https://qcc-static.qcc.com/resources/web/omaterial/favicon.png",
         Show: !0
     }, {
         Id: 5,
-        Title: "百度信誉",
-        Host: "https://xin.baidu.com",
-        SearchUrl: "/s?q=",
-        Show: !0
-    }, {
-        Id: 6,
         Title: "百度搜索",
         Host: "https://baidu.com",
         SearchUrl: "/s?wd=",
