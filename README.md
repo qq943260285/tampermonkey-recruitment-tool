@@ -3,7 +3,7 @@
 [![Author](https://img.shields.io/badge/Author-xiaoyu-brightgreen)](https://greasyfork.org/zh-TW/scripts/380848)
 [![LICENSE](https://img.shields.io/github/license/qq943260285/tampermonkey-recruitment-tool)](LICENSE)
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/dhdgffkkebhmkfjojejmpbldmpobfkfo.svg)](https://chrome.google.com/webstore/detail/dhdgffkkebhmkfjojejmpbldmpobfkfo)
-[![Install](https://img.shields.io/badge/Install-V4.22.0719-brightgreen)](https://greasyfork.org/zh-TW/scripts/380848)
+[![Install](https://img.shields.io/badge/Install-V4.23.2.25-brightgreen)](https://greasyfork.org/zh-TW/scripts/380848)
 ![Stars](https://img.shields.io/github/stars/qq943260285/tampermonkey-recruitment-tool?style=social)
 
 # 高级求职助手/招聘网站助手
