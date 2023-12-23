@@ -1,17 +1,17 @@
 // ==UserScript==
 // @name         高级求职助手/招聘网站助手，支持前程无忧、智联招聘、BOSS直聘、拉钩网、猎聘网、58同城
 // @namespace    https://github.com/qq943260285
-// @version      4.23.2.25
+// @version      4.23.12.23
 // @description  1.快捷添加企业黑名单；2.快捷公司/企业信息查询，支持天眼查、看准、企查查、爱企查、百度信誉、百度搜索；3.支持全网热门招聘网站，前程无忧、智联招聘、BOSS直聘、拉钩网、猎聘网、58同城；4.各大网站黑名单数据连通。
 // @author       小宇专属
 // @license      GPL-3.0-only
 // @icon         https://raw.githubusercontent.com/qq943260285/tampermonkey-recruitment-tool/master/assets/logo_ico.png
 // @create       2019-03-25
-// @lastmodified 2023-02-25
+// @lastmodified 2023-12-23
 // @home-url     https://greasyfork.org/zh-TW/scripts/380848
 // @supportURL   https://github.com/qq943260285/tampermonkey-recruitment-tool.git
 // @feedback-url https://github.com/qq943260285/tampermonkey-recruitment-tool.git
-// @note         2023-2-25 1.修复猎聘失效问题 2.修复前程无忧失效问题 3.去除百度招聘
+// @note         2023-12-23 1.修复前程无忧失效问题 2.修复企业查询失效问题
 // @match        *://*.51job.com/*
 // @match        *://sou.zhaopin.com/*
 // @match        *://www.zhipin.com/*
@@ -180,8 +180,8 @@
         });
     }
     var body = $("body");
-    body.before('<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />'),
-        body.before("<style>.xyzs-del-div{color:#ff5c4c;font-size:20px;cursor:pointer;float:left;margin:0 3px}.xyzs-search-div{color:#ff5c4c;font-size:20px;cursor:pointer;float:left;margin:0 3px}.xyzs-search-ico{color:#ff5c4c!important}.xyzs-del-ico{color:#ff5c4c!important}.xyzs-enterprise-item{border-radius:10px;color:#666}.xyzs-enterprise-item:hover{background-color:rgba(255,96,80,.15)}.xyzs-enterprise-item-ico{cursor:pointer}.xyzs-stand-item{cursor:pointer;margin:0 10px;padding:5px 15px}.xyzs-stand-item:hover{background-color:rgba(255,96,80,.15)}.xyzs-stand-item img{color:#333}.xyzs-stand-item span{color:#666;margin-left:10px;font-size:14px}.xyzs-stand-item i{padding:0 2px}.xyzs-search-div-lists{float:right;padding:0 5px;background-color:#fff;border:1px solid;display:none;position:absolute;border-radius:6px;margin-left:23px;margin-top:-34px;z-index:9999;box-shadow:0 0 10px rgba(82,82,82,.3)}.xyzs-search-div-lists::before{content:'';display:block;position:absolute;top:8px;left:-8px;border-top:6px solid transparent;border-right:8px solid #ff0909;border-bottom:6px solid transparent}.xyzs-search-div-lists::after{content:'';display:block;position:absolute;top:8px;left:-7px;border-top:6px solid transparent;border-right:8px solid #fff;border-bottom:6px solid transparent}.xyzs-search-div-list{margin:5px;line-height:16px;height:auto;width:16px}.xyzs-search-div-list-img{height:100%;width:100%;box-shadow:0 0 5px rgba(82,82,82,.3)}.xyzs-modal-body .modal-content{text-align:center}.xyzs-modal-body .reward-title{margin:15px auto;padding-bottom:5px;font-size:1.45rem;font-weight:700;line-height:1.45rem}.xyzs-modal-body .reward-img{height:150px;padding:0 25px}</style>"), $.FloatingToolXYZS([ {
+    body.before('<link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" type="text/css" />'),
+        body.before("<style>.xyzs-del-div{color:#ff5c4c;font-size:20px;cursor:pointer;float:left;margin:0 3px}.xyzs-search-div{color:#ff5c4c;font-size:20px;cursor:pointer;float:left;margin:0 3px}.xyzs-search-ico{color:#ff5c4c!important}.xyzs-del-ico{color:#ff5c4c!important}.xyzs-enterprise-item{border-radius:10px;color:#666}.xyzs-enterprise-item:hover{background-color:rgba(255,96,80,.15)}.xyzs-enterprise-item-ico{cursor:pointer}.xyzs-stand-item{cursor:pointer;margin:0 10px;padding:5px 15px}.xyzs-stand-item:hover{background-color:rgba(255,96,80,.15)}.xyzs-stand-item img{color:#333}.xyzs-stand-item span{color:#666;margin-left:10px;font-size:14px}.xyzs-stand-item i{padding:0 2px}.xyzs-search-div-lists{float:right;padding:0 5px;background-color:#fff;border:1px solid;display:none;position:absolute;border-radius:6px;margin-left:23px;margin-top:-34px;z-index:9999;box-shadow:0 0 10px rgba(82,82,82,.3)}.xyzs-search-div-lists::before{content:'';display:block;position:absolute;top:8px;left:-8px;border-top:6px solid transparent;border-right:8px solid #ff0909;border-bottom:6px solid transparent}.xyzs-search-div-lists::after{content:'';display:block;position:absolute;top:8px;left:-7px;border-top:6px solid transparent;border-right:8px solid #fff;border-bottom:6px solid transparent}.xyzs-search-div-list{margin:5px;line-height:16px;height:auto;width:16px}.xyzs-search-div-list-img{height:100%;width:100%;box-shadow:0 0 5px rgba(82,82,82,.3)}.xyzs-modal-body .modal-content{text-align:center}.xyzs-modal-body .reward-title{margin:15px auto;padding-bottom:5px;font-size:1.45rem;font-weight:700;line-height:1.45rem}.xyzs-modal-body .reward-img{height:150px;padding:0 25px}.xyzs-modal-body .modal-left .modal-txt{overflow-y:auto;height:400px;text-align:left}.xyzs-modal-body .modal-left .modal-txt div{word-break:break-all;border:1px solid;margin:3px 0;padding:5px}.xyzs-modal-body .modal-left .modal-txt div span:first-child{color:#ff5c4c;font-weight:700;font-size:14px}.xyzs-modal-body .modal-left .modal-button{text-align:right}</style>"), $.FloatingToolXYZS([ {
         ico: "fa-eye-slash",
         title: "黑名单管理",
         callback: function() {
@@ -266,18 +266,18 @@
         WebName: "前程无忧",
         WebUrl: "we.51job.com",
         IsRefresh: !0,
-        DleButtonStyle: "position: absolute;left: -45px;top: 0px; float: left;",
+        DleButtonStyle: "display: inherit;",
         HtmlToList: function() {
-            return $(".j_joblist>.e");
+            return $(".joblist>.joblist-item");
         },
         ItemToNameJq: function(item) {
-            return $(item).find(".er a[title]");
+            return $(item).find(".cname");
         },
         NameJqToNameText: function(item) {
             return $(item).attr("title");
         },
         DleButtonToItem: function(item) {
-            return $(item).closest(".e");
+            return $(item).closest(".joblist-item");
         }
     }, {
         WebName: "智联招聘",
@@ -341,8 +341,9 @@
         ItemToNameJq: function(item) {
             return $(item).find(".company-name");
         },
-        NameJqToNameText: function(item) {
-            return $(item).text();
+        NameJqToNameText: function(name) {
+            name = $(name).text();
+            return name;
         },
         DleButtonToItem: function(item) {
             return $(item).closest("div[xyzs]");
@@ -374,20 +375,20 @@
         Id: 2,
         Title: "爱企查",
         Host: "https://aiqicha.baidu.com",
-        SearchUrl: "s?t=0&q=",
+        SearchUrl: "/s?t=0&q=",
         Ico: "http://xinpub.cdn.bcebos.com/static/favicon.ico",
         Show: !0
     }, {
         Id: 3,
         Title: "看准",
-        Host: "https://kanzhun.com",
-        SearchUrl: "/search/?type=company&q=",
+        Host: "https://www.kanzhun.com",
+        SearchUrl: "/search/?type=0&query=",
         Show: !0
     }, {
         Id: 4,
         Title: "企查查",
-        Host: "https://qcc.com",
-        SearchUrl: "web/search?key=",
+        Host: "https://www.qcc.com",
+        SearchUrl: "/web/search?key=",
         Ico: "https://qcc-static.qcc.com/resources/web/omaterial/favicon.png",
         Show: !0
     }, {
